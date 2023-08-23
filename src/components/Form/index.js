@@ -29,14 +29,14 @@ function validation(){
             <View style={styles.boxInput}>
                 <TextInput
                 placeholder='Usuário'
-                onChangeText={setUser}
+                onChangeText={(text) => setUser(text.replace(' ', ''))}
                 value={user}
                 style={styles.input}
                 />
                 <TextInput
                 placeholder='Senha'
                 secureTextEntry={true}
-                onChangeText={setPassword}
+                onChangeText={(text) => setPassword(text.replace(' ', ''))}
                 value={password}
                 style={styles.input}
                 />
