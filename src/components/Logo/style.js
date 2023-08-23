@@ -2,13 +2,14 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
     logoImg: {
-        height: 300,
-        width: 300,
+        height: "100%",
+        width: "100%",
     },
 
     logo: {
-        marginTop: 50,
-        height: 290,
+        marginTop: "14%",
+        height: "34%",
+        width: "100%",
     }
 });
 
