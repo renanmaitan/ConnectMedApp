@@ -1,24 +1,37 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View } from 'react-native';
-import Logo from './src/components/Logo/'
-import Form from './src/components/Form/'
-import Copyright from './src/components/Copyright';
+import React from "react"
+
+import { NavigationContainer } from "@react-navigation/native"
+import { createStackNavigator } from "@react-navigation/stack"
+import { StatusBar, StyleSheet } from "react-native"
+
+import Home from "./src/telas/Home/"
+import Login from "./src/telas/Login/"
+import Cadastro from "./src/telas/Cadastro/"
+
+const Stack = createStackNavigator()
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Logo/>
-      <Form/>
-      <Copyright/>
-      <StatusBar backgroundColor='#086972'/>
-    </View>
-  );
+    <NavigationContainer>
+      <StatusBar backgroundColor="#086972" />
+      <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen 
+        options={{ 
+          headerShown: true,
+          headerStyle: styles.header,
+          headerTintColor: '#FFF',
+        }}
+        name="Cadastro" component={Cadastro}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
+  )
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#DFEDEB',
-    alignItems: 'center',
+  header: {
+    backgroundColor: "#086972",
   },
-});
+})
