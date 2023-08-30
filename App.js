@@ -77,7 +77,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <StatusBar backgroundColor="#086972" />
-      <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
+      <Stack.Navigator initialRouteName="Home" screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Home" component={Tabs} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen 

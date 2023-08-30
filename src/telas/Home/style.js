@@ -41,55 +41,8 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginTop: "2%",
     },
-    cards:{
-        backgroundColor: '#BBD7D9',
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-around',
+    carouselBody: {
         width: '100%',
-        alignItems: 'center',
-        marginTop: "5%",
-    },
-    card: {
-        width: '45%',
-        backgroundColor: 'rgba(8, 105, 114, 0.2)',
-        borderRadius: 10,
-        alignItems: 'center',
-        marginTop: "5%",
-        marginBottom: "5%",
-    },
-    cardTop: {
-        width: '100%',
-        backgroundColor: 'rgba(8, 105, 114, 1)',
-        borderTopStartRadius: 10,
-        borderTopEndRadius: 10,
-        padding: "3%",
-        alignItems: 'center',
-    },
-    cardBody: {
-        width: '100%',
-        padding: "3%",
-        alignItems: 'left',
-        marginLeft: "5%",
-        marginTop: "5%",
-        marginBottom: "5%",
-    },
-    cardTitle: {
-        fontFamily: 'sans-serif-light',
-        fontSize: 17,
-        fontWeight: 'bold',
-        color: '#FFF',
-    },
-    cardContentUnderline: {
-        fontFamily: 'sans-serif-light',
-        fontSize: 15,
-        fontWeight: 'bold',
-        textDecorationLine: 'underline',
-    },
-    cardContent: {
-        fontFamily: 'sans-serif-light',
-        fontSize: 15,
-        fontWeight: 'bold',
     },
 });
 
