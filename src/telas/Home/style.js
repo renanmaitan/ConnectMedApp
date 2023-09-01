@@ -10,6 +10,9 @@ const styles = StyleSheet.create({
     },
     scrollview: {
         backgroundColor: '#DFEDEB',
+        width: '100%',
+        alignItems: 'center',
+        flex: 1,
     },
     copyright: {
         position: 'absolute', // Use absolute em vez de fixed
@@ -26,23 +29,54 @@ const styles = StyleSheet.create({
         fontFamily: 'sans-serif-light',
         fontSize: 30,
         fontWeight: 'bold',
-        color: '#086972',
+        color: '#FFF',
         marginTop: "10%",
+        textShadowColor: 'rgba(0, 0, 0, 0.75)',
+        textShadowOffset: {width: -1, height: 1},
+        textShadowRadius: 2,
     },
     carousel: {
         width: '100%',
         alignItems: 'center',
         borderRadius: 10,
-        marginTop: "5%",
+        marginTop: "6%",
+        marginBottom: "5%",
     },
     carouselTitle: {
         fontFamily: 'sans-serif-light',
         fontSize: 18,
         fontWeight: 'bold',
-        marginTop: "2%",
+        marginBottom: "2%",
+        color: '#FFF',
+        textShadowColor: 'rgba(0, 0, 0, 0.75)',
+        textShadowOffset: {width: -1, height: 1},
+        textShadowRadius: 1,
     },
     carouselBody: {
         width: '100%',
+    },
+    button: {
+        backgroundColor: '#086972',
+        borderRadius: 10,
+        padding: "3%",
+        marginTop: "2%",
+        width: '60%',
+        alignItems: 'center',
+    },
+    buttonRed: {
+        backgroundColor: 'rgba(150, 0, 0, 1)',
+        borderRadius: 10,
+        padding: "3%",
+        marginTop: "2%",
+        width: '60%',
+        alignItems: 'center',
+    },
+    textButton: {
+        fontFamily: 'sans-serif-light',
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#FFF',
+        textAlign: 'center',
     },
 });
 

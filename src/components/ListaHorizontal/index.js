@@ -3,7 +3,7 @@ import { FlatList, View, Dimensions, StyleSheet, Text } from "react-native";
 
 const { width } = Dimensions.get("window");
 
-const ListaHorizontal = ({ data }) => {
+const ListaHorizontal = ({ data, estilo }) => {
     return (
         <FlatList
             data={data}
@@ -15,15 +15,15 @@ const ListaHorizontal = ({ data }) => {
             decelerationRate="fast"
             showsHorizontalScrollIndicator={false}
             renderItem={({ item }) => (
-                <View style={item.id == 1? styles.cardOne : styles.cards}>
+                <View style={item.id == 1? styles.cardOne : (item.id == data.length? styles.cardLast : styles.cards)}>
                     <View style={styles.card}>
-                        <View style={styles.cardTop}>
+                        <View style={estilo=='cinza'? (item.present ? styles.cardTopCinzaTrue:styles.cardTopCinzaFalse) : styles.cardTop}>
                             <Text style={styles.cardTitle}>{item.day}/{item.month}/{item.year}</Text>
                             <Text style={styles.cardTitle}>{item.hour}:{item.minute}</Text>
                         </View>
                         <View style={styles.cardBody}>
-                            <Text style={styles.cardContent}>Nenhum agendamento ainda</Text>
-                            <Text style={styles.cardContentUnderline}>Lista de Médicos</Text>
+                            <Text style={styles.cardContent}>{item.name}{'\n'}{item.specialty}</Text>
+                            <Text style={styles.cardContentUnderline}>{item.address}</Text>
                         </View>
                     </View>
                 </View>
@@ -52,10 +52,20 @@ const styles = StyleSheet.create({
         marginHorizontal: width*0.025,
         marginLeft: width*0.2,
     },
+    cardLast:{
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        width: width*0.6,
+        alignItems: 'center',
+        height: width/2.6,
+        marginHorizontal: width*0.025,
+        marginRight: width*0.2,
+    },
     card: {
         width: '100%',
         height: '100%',
-        backgroundColor: 'rgba(8, 105, 114, 0.2)',
+        backgroundColor: 'rgba(200, 230, 250, 1)',
         borderRadius: 10,
         alignItems: 'center',
     },
@@ -71,13 +81,35 @@ const styles = StyleSheet.create({
         paddingLeft: "10%",
         paddingRight: "10%",
     },
+    cardTopCinzaTrue: {
+        width: '100%',
+        backgroundColor: 'rgba(8, 150, 200, 1)',
+        borderTopStartRadius: 10,
+        borderTopEndRadius: 10,
+        padding: "3%",
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        flexDirection: 'row',
+        paddingLeft: "10%",
+        paddingRight: "10%",
+    },
+    cardTopCinzaFalse: {
+        width: '100%',
+        backgroundColor: 'rgba(150, 0, 0, 1)',
+        borderTopStartRadius: 10,
+        borderTopEndRadius: 10,
+        padding: "3%",
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        flexDirection: 'row',
+        paddingLeft: "10%",
+        paddingRight: "10%",
+    },
     cardBody: {
         width: '100%',
         padding: "3%",
         alignItems: 'left',
         marginLeft: "5%",
-        marginTop: "5%",
-        marginBottom: "5%",
     },
     cardTitle: {
         fontFamily: 'sans-serif-light',
@@ -93,8 +125,9 @@ const styles = StyleSheet.create({
     },
     cardContent: {
         fontFamily: 'sans-serif-light',
-        fontSize: 15,
+        fontSize: 20,
         fontWeight: 'bold',
+        marginBottom: "5%",
     },
 });
 
