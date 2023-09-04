@@ -12,6 +12,8 @@ import { FontAwesome5 } from "@expo/vector-icons"
 import Home from "./src/telas/Home/"
 import Login from "./src/telas/Login/"
 import Cadastro from "./src/telas/Cadastro/"
+import Medicos from "./src/telas/Medicos"
+import Presencial from "./src/telas/Presencial"
 
 const Stack = createStackNavigator()
 const Tab = createBottomTabNavigator()
@@ -33,6 +35,25 @@ const options = {
   },
 }
 
+function MedicosStack() {
+  return (
+    <Stack.Navigator initialRouteName="Medicos" screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="Medicos" component={Medicos} />
+      <Stack.Screen 
+      name="Presencial" 
+      component={Presencial} 
+      options={
+        {
+          headerShown: true,
+          headerStyle: styles.header,
+          headerTintColor: '#FFF',
+        }
+      }
+      />
+    </Stack.Navigator>
+  )
+}
+
 function Tabs() {
   return (
     <Tab.Navigator 
@@ -52,7 +73,7 @@ function Tabs() {
       />
       <Tab.Screen 
       name="Médicos" 
-      component={Login}
+      component={MedicosStack}
       options={{
         tabBarIcon: ({ color, size }) => (
           <FontAwesome5 name="user-md" color={color} size={size} />

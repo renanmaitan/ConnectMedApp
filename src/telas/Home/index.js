@@ -5,7 +5,7 @@ import styles from "./style";
 import ListaHorizontal from "../../components/ListaHorizontal";
 import { LinearGradient } from "expo-linear-gradient";
 
-export default function Login() {
+export default function Login({navigation}) {
     const dataHistory= [
         {
             id: 1,
@@ -95,10 +95,10 @@ export default function Login() {
             <View style={styles.carousel}>
                 <Text style={styles.carouselTitle}>Seu histórico:</Text>
                 <View style={styles.carouselBody}>
-                    <ListaHorizontal data={dataHistory} estilo='cinza'/>
+                    <ListaHorizontal data={dataHistory} type='history'/>
                 </View>
             </View>
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Médicos')}>
                 <Text style={styles.textButton}>Agendar Consulta</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.buttonRed}>
