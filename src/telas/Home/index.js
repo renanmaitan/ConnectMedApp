@@ -1,12 +1,12 @@
 import React from "react";
 
-import { Text, View, TouchableOpacity} from "react-native";
+import { Text, View, TouchableOpacity } from "react-native";
 import styles from "./style";
 import ListaHorizontal from "../../components/ListaHorizontal";
 import { LinearGradient } from "expo-linear-gradient";
 
-export default function Login({navigation}) {
-    const dataHistory= [
+export default function Login({ navigation }) {
+    const dataHistory = [
         {
             id: 1,
             name: "Doutor Fran",
@@ -42,7 +42,7 @@ export default function Login({navigation}) {
             minute: "20",
             address: "Rua dos Bobos, 2",
             present: true,
-        },  
+        },
     ]
     const data = [
         {
@@ -85,25 +85,27 @@ export default function Login({navigation}) {
                 colors={['#086972', 'transparent']}
                 style={styles.scrollview}
             >
-            <Text style={styles.title}>Olá, Renan!</Text>
-            <View style={styles.carousel}>
-                <Text style={styles.carouselTitle}>Seus agendamentos:</Text>
-                <View style={styles.carouselBody}>
-                    <ListaHorizontal data={data} />
+                <Text style={styles.title}>Olá, Renan!</Text>
+                <View style={styles.carousel}>
+                    <Text style={styles.carouselTitle}>Seus agendamentos:</Text>
+                    <View style={styles.carouselBody}>
+                        <ListaHorizontal data={data} />
+                    </View>
                 </View>
-            </View>
-            <View style={styles.carousel}>
-                <Text style={styles.carouselTitle}>Seu histórico:</Text>
-                <View style={styles.carouselBody}>
-                    <ListaHorizontal data={dataHistory} type='history'/>
+                <View style={styles.carousel}>
+                    <Text style={styles.carouselTitle}>Seu histórico:</Text>
+                    <View style={styles.carouselBody}>
+                        <ListaHorizontal data={dataHistory} type='history' />
+                    </View>
                 </View>
-            </View>
-            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Médicos')}>
-                <Text style={styles.textButton}>Agendar Consulta</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.buttonRed}>
-                <Text style={styles.textButton}>Cancelar Agendamento</Text>
-            </TouchableOpacity>
+                <View style={styles.buttons}>
+                    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Médicos')}>
+                        <Text style={styles.textButton}>Agendar Consulta</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.buttonRed}>
+                        <Text style={styles.textButton}>Cancelar Agendamento</Text>
+                    </TouchableOpacity>
+                </View>
             </LinearGradient>
         </View>
     );

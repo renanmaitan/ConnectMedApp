@@ -10,10 +10,10 @@ export default function Select({ options, onChangeSelect, text }) {
     function renderOption ( item ) {
         return (
             <TouchableOpacity style={[styles.optionContainer,{backgroundColor:item.id==selected? '#eee':'#fff'}]} onPress={() => {
-                onChangeSelect(item.id)
                 setTxt(item.label)
                 setModalVisible(false)
                 setSelected(item.id)
+                onChangeSelect(item.id)
             }}>
                 <Text style={[styles.optionTxt, {fontWeight:item.id==selected? 'bold':'normal'}]}>{item.label}</Text>
                 {item.id == selected && (
@@ -36,7 +36,7 @@ export default function Select({ options, onChangeSelect, text }) {
             >
                 <SafeAreaView>
                     <View style={styles.headerModal}>
-                        <TouchableOpacity onPress={() => setModalVisible(false)}>
+                        <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.backModal}>
                             <FontAwesome5 name="chevron-left" size={20} color="#555"/>
                         </TouchableOpacity>
                         <Text style={styles.modalTitle}>{text}</Text>
@@ -105,4 +105,8 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: "#555",
     },
+    backModal: {
+        width: "10%",
+    }
+
 });

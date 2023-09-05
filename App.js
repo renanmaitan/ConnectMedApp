@@ -6,6 +6,7 @@ import { StatusBar, StyleSheet } from "react-native"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { FontAwesome5 } from "@expo/vector-icons"
 
+
 // import { AppLoading } from "expo"
 // import { useFonts } from "expo-font"
 
@@ -14,6 +15,7 @@ import Login from "./src/telas/Login/"
 import Cadastro from "./src/telas/Cadastro/"
 import Medicos from "./src/telas/Medicos"
 import Presencial from "./src/telas/Presencial"
+
 
 const Stack = createStackNavigator()
 const Tab = createBottomTabNavigator()
