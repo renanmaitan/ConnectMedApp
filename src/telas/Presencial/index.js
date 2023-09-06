@@ -5,7 +5,7 @@ import { FontAwesome5 } from "@expo/vector-icons"
 
 import styles from "./style";
 import Select from "../../components/Select";
-
+import RatingRead from "../../components/RatingRead";
 
 export default function Presencial({ navigation }) {
 
@@ -38,6 +38,7 @@ export default function Presencial({ navigation }) {
         cep: "12345678",
         rua: "Rua das Flores",
         numero: "284",
+        points: 4.5,
         bairro: "Jd. Jardim",
         cidade: "São Paulo",
         estado: "SP",
@@ -48,6 +49,7 @@ export default function Presencial({ navigation }) {
         {
             id: 1,
             name: "Doutor Fran",
+            points: 4.5,
             specialty: "Clinico Geral",
             phone: "(11) 99999-9999",
             price: "R$ 100,00",
@@ -62,6 +64,7 @@ export default function Presencial({ navigation }) {
             name: "Doutor Fran",
             specialty: "Clinico Geral",
             phone: "(11) 99999-9999",
+            points: 4.5,
             city: "São Paulo",
             cep: "12345678",
             bairro: "Jd. Jardim",
@@ -78,6 +81,7 @@ export default function Presencial({ navigation }) {
             bairro: "Jd. Jardim",
             phone: "(11) 99999-9999",
             price: "R$ 100,00",
+            points: 4.5,
             address: "Rua dos Bobos, 0",
             crm: "123456",
         },
@@ -90,6 +94,7 @@ export default function Presencial({ navigation }) {
             cep: "12345678",
             bairro: "Jd. Jardim",
             price: "R$ 100,00",
+            points: 4.5,
             address: "Rua dos Bobos, 0",
             crm: "123456",
         },
@@ -101,6 +106,7 @@ export default function Presencial({ navigation }) {
             price: "R$ 100,00",
             city: "São Paulo",
             cep: "12345678",
+            points: 4.5,
             bairro: "Jd. Jardim",
             address: "Rua dos Bobos, 0",
             crm: "123456",
@@ -114,6 +120,7 @@ export default function Presencial({ navigation }) {
             city: "São Paulo",
             cep: "12345678",
             bairro: "Jd. Jardim",
+            points: 4.5,
             address: "Rua dos Bobos, 0",
             crm: "123456",
         },
@@ -123,6 +130,7 @@ export default function Presencial({ navigation }) {
             specialty: "Clinico Geral",
             phone: "(11) 99999-9999",
             price: "R$ 100,00",
+            points: 4.5,
             address: "Rua dos Bobos, 0",
             city: "São Paulo",
             cep: "12345678",
@@ -135,6 +143,7 @@ export default function Presencial({ navigation }) {
             specialty: "Clinico Geral",
             phone: "(11) 99999-9999",
             city: "São Paulo",
+            points: 4.5,
             cep: "12345678",
             bairro: "Jd. Jardim",
             price: "R$ 100,00",
@@ -151,6 +160,7 @@ export default function Presencial({ navigation }) {
             city: "São Paulo",
             cep: "12345678",
             bairro: "Jd. Jardim",
+            points: 4.5,
             crm: "123456",
         },
         {
@@ -160,6 +170,7 @@ export default function Presencial({ navigation }) {
             phone: "(11) 99999-9999",
             price: "R$ 100,00",
             address: "Rua dos Bobos, 0",
+            points: 4.5,
             crm: "123456",
             city: "São Paulo",
             cep: "12345678",
@@ -179,6 +190,7 @@ export default function Presencial({ navigation }) {
             price: "R$ 100,00",
             address: "Rua dos Bobos, 0",
             crm: "123456",
+            points: 4.5,
         },
         {
             id: 12,
@@ -188,6 +200,7 @@ export default function Presencial({ navigation }) {
             cep: "12345678",
             bairro: "Jd. Jardim",
             phone: "(11) 99999-9999",
+            points: 4.5,
             price: "R$ 100,00",
             address: "Rua dos Bobos, 0",
             crm: "123456",
@@ -200,6 +213,7 @@ export default function Presencial({ navigation }) {
             city: "São Paulo",
             cep: "12345678",
             bairro: "Jd. Jardim",
+            points: 4.5,
             price: "R$ 100,00",
             address: "Rua dos Bobos, 0",
             crm: "123456",
@@ -215,6 +229,7 @@ export default function Presencial({ navigation }) {
             bairro: "Jd. Jardim",
             price: "R$ 100,00",
             address: "Rua dos Bobos, 0",
+            points: 4.5,
         },
         {
             id: 15,
@@ -226,11 +241,13 @@ export default function Presencial({ navigation }) {
             crm: "123456",
             phone: "(11) 99999-9999",
             price: "R$ 100,00",
+            points: 4.5,
             address: "Rua dos Bobos, 0",
         },
         {
             id: 16,
             name: "Doutor Fran",
+            points: 4.5,
             city: "São Paulo",
             cep: "12345678",
             bairro: "Jd. Jardim",
@@ -248,6 +265,7 @@ export default function Presencial({ navigation }) {
             price: "R$ 100,00",
             crm: "123456",
             address: "Rua dos Bobos, 0",
+            points: 4.5,
             city: "São Paulo",
             cep: "12345678",
             bairro: "Jd. Jardim",
@@ -258,6 +276,7 @@ export default function Presencial({ navigation }) {
             specialty: "Cardiologista",
             phone: "(11) 99999-9999",
             price: "R$ 100,00",
+            points: 4.5,
             address: "Rua dos Bobos, 0",
             city: "São Paulo",
             cep: "12345678",
@@ -271,6 +290,7 @@ export default function Presencial({ navigation }) {
             phone: "(11) 99999-9999",
             city: "São Paulo",
             cep: "12345678",
+            points: 4.5,
             bairro: "Jd. Jardim",
             crm: "123456",
             price: "R$ 100,00",
@@ -287,6 +307,7 @@ export default function Presencial({ navigation }) {
             price: "R$ 100,00",
             address: "Rua dos Bobos, 0",
             crm: "123456",
+            points: 4.5,
         },
     ];
 
@@ -298,6 +319,7 @@ export default function Presencial({ navigation }) {
             phone: "(11) 99999-9999",
             price: "R$ 100,00",
             crm: "123456",
+            points: 3.5,
             city: "São Paulo",
             cep: "12345678",
             bairro: "Jd. Jardim",
@@ -312,6 +334,7 @@ export default function Presencial({ navigation }) {
             price: "R$ 100,00",
             city: "São Paulo",
             cep: "12345678",
+            points: 2,
             bairro: "Jd. Jardim",
             address: "Rua dos Bobos, 0",
         },
@@ -322,6 +345,7 @@ export default function Presencial({ navigation }) {
             phone: "(11) 99999-9999",
             price: "R$ 100,00",
             city: "São Paulo",
+            points: 4.25,
             cep: "12345678",
             bairro: "Jd. Jardim",
             crm: "123456",
@@ -334,6 +358,7 @@ export default function Presencial({ navigation }) {
             crm: "123456",
             phone: "(11) 99999-9999",
             city: "São Paulo",
+            points: 5,
             cep: "12345678",
             bairro: "Jd. Jardim",
             price: "R$ 100,00",
@@ -347,6 +372,7 @@ export default function Presencial({ navigation }) {
             crm: "123456",
             city: "São Paulo",
             cep: "12345678",
+            points: 4.5,
             bairro: "Jd. Jardim",
             price: "R$ 100,00",
             address: "Rua dos Bobos, 0",
@@ -359,6 +385,7 @@ export default function Presencial({ navigation }) {
             price: "R$ 100,00",
             crm: "123456",
             city: "São Paulo",
+            points: 4.5,
             cep: "12345678",
             bairro: "Jd. Jardim",
             address: "Rua dos Bobos, 0",
@@ -371,6 +398,7 @@ export default function Presencial({ navigation }) {
             crm: "123456",
             price: "R$ 100,00",
             address: "Rua dos Bobos, 0",
+            points: 4.5,
             city: "São Paulo",
             cep: "12345678",
             bairro: "Jd. Jardim",
@@ -379,6 +407,7 @@ export default function Presencial({ navigation }) {
             id: 28,
             name: "Doutor Fran",
             crm: "123456",
+            points: 4.5,
             specialty: "Dentista",
             phone: "(11) 99999-9999",
             price: "R$ 100,00",
@@ -394,6 +423,7 @@ export default function Presencial({ navigation }) {
             specialty: "Dentista",
             city: "São Paulo",
             cep: "12345678",
+            points: 4.5,
             bairro: "Jd. Jardim",
             phone: "(11) 99999-9999",
             price: "R$ 100,00",
@@ -402,6 +432,7 @@ export default function Presencial({ navigation }) {
         {
             id: 30,
             name: "Doutor Fran",
+            points: 4.5,
             specialty: "Dentista",
             city: "São Paulo",
             cep: "12345678",
@@ -476,17 +507,33 @@ export default function Presencial({ navigation }) {
                 keyExtractor={(item) => String(item.id)}
                 renderItem={({ item }) => (
                     <View style={styles.itemContainer}>
-                        <TouchableOpacity style={styles.item} onPress={() => navigation.navigate("Agendar", item.id)}>
+                        <TouchableOpacity style={styles.item} onPress={() => navigation.navigate("Agendar", {
+                            itemId: item.id,
+                            itemName: item.name,
+                            itemSpecialty: item.specialty,
+                            itemCrm: item.crm,
+                            itemPrice: item.price,
+                            itemAddress: item.address,
+                            itemCity: item.city,
+                            itemCep: item.cep,
+                            itemBairro: item.bairro,
+                            itemPhone: item.phone,
+                        })}>
                             <LinearGradient
                                 start={{ x: 0, y: 1 }} end={{ x: 1, y: 0 }}
                                 locations={[0, 0.2, 0.8]}
                                 colors={["#68a4b3", "#0c6577", "#11687c"]}
                                 style={styles.itemGradient}
                             >
-                                <Text style={styles.itemTitle}>{item.name}</Text>
-                                <Text style={styles.itemSubTitle}>{item.specialty} | CRM {item.crm}</Text>
+                                <View style={styles.topCard}>
+                                    <View>
+                                        <Text style={styles.itemTitle}>{item.name}</Text>
+                                        <Text style={styles.itemSubTitle}>{item.specialty} | CRM {item.crm}</Text>
+                                    </View>
+                                    <RatingRead points={item.points} />
+                                </View>
                                 <View style={styles.bodyCard}>
-                                    <FontAwesome5 name="user-md" size={50} color="#4aacc4"/>
+                                    <FontAwesome5 name="user-md" size={50} color="#4aacc4" />
                                     <View style={styles.bodyContainer}>
                                         <View style={styles.bodyContent}>
                                             <FontAwesome5 name="whatsapp" size={16} color="#fff" />

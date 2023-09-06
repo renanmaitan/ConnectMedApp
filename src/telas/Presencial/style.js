@@ -72,7 +72,7 @@ export default styles = StyleSheet.create({
         justifyContent: "space-between",
         width: "100%",
         padding: "2%",
-        marginTop: "10%",
+        marginTop: "5%",
         marginHorizontal: "2%",
         marginBottom: "5%",
     },
@@ -87,5 +87,9 @@ export default styles = StyleSheet.create({
         color: "#fff",
         fontSize: 12,
         textAlign: "center",
-    }
+    },
+    topCard: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+    },
 });

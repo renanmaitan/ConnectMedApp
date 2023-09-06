@@ -15,6 +15,7 @@ import Login from "./src/telas/Login/"
 import Cadastro from "./src/telas/Cadastro/"
 import Medicos from "./src/telas/Medicos"
 import Presencial from "./src/telas/Presencial"
+import Agendar from "./src/telas/Agendar"
 
 
 const Stack = createStackNavigator()
@@ -111,6 +112,7 @@ export default function App() {
         }}
         name="Cadastro" component={Cadastro}
         />
+        <Stack.Screen name="Agendar" component={Agendar} />
       </Stack.Navigator>
     </NavigationContainer>
   )
