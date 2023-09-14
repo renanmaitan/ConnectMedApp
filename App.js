@@ -42,16 +42,16 @@ function MedicosStack() {
   return (
     <Stack.Navigator initialRouteName="Medicos" screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Medicos" component={Medicos} />
-      <Stack.Screen 
-      name="Presencial" 
-      component={Presencial} 
-      options={
-        {
-          headerShown: true,
-          headerStyle: styles.header,
-          headerTintColor: '#FFF',
+      <Stack.Screen
+        name="Presencial"
+        component={Presencial}
+        options={
+          {
+            headerShown: true,
+            headerStyle: styles.header,
+            headerTintColor: '#FFF',
+          }
         }
-      }
       />
     </Stack.Navigator>
   )
@@ -59,29 +59,29 @@ function MedicosStack() {
 
 function Tabs() {
   return (
-    <Tab.Navigator 
-    initialRouteName="HomeTab" 
-    backBehavior="history" 
-    screenOptions={options}
+    <Tab.Navigator
+      initialRouteName="HomeTab"
+      backBehavior="history"
+      screenOptions={options}
     >
-      <Tab.Screen 
-      name="HomeTab" 
-      component={Home} 
-      options={{
-        tabBarLabel: "Ínicio",
-        tabBarIcon: ({ color, size }) => (
-          <FontAwesome5 name="home" color={color} size={size} />
-        ),
-      }}
+      <Tab.Screen
+        name="HomeTab"
+        component={Home}
+        options={{
+          tabBarLabel: "Ínicio",
+          tabBarIcon: ({ color, size }) => (
+            <FontAwesome5 name="home" color={color} size={size} />
+          ),
+        }}
       />
-      <Tab.Screen 
-      name="Médicos" 
-      component={MedicosStack}
-      options={{
-        tabBarIcon: ({ color, size }) => (
-          <FontAwesome5 name="user-md" color={color} size={size} />
-        ),
-      }}
+      <Tab.Screen
+        name="Médicos"
+        component={MedicosStack}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <FontAwesome5 name="user-md" color={color} size={size} />
+          ),
+        }}
       />
       <Tab.Screen
         name="Minha Conta"
@@ -104,13 +104,13 @@ export default function App() {
       <Stack.Navigator initialRouteName="Home" screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Home" component={Tabs} />
         <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen 
-        options={{ 
-          headerShown: true,
-          headerStyle: styles.header,
-          headerTintColor: '#FFF',
-        }}
-        name="Cadastro" component={Cadastro}
+        <Stack.Screen
+          options={{
+            headerShown: true,
+            headerStyle: styles.header,
+            headerTintColor: '#FFF',
+          }}
+          name="Cadastro" component={Cadastro}
         />
         <Stack.Screen name="Agendar" component={Agendar} />
       </Stack.Navigator>

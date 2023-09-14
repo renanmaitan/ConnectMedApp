@@ -1,8 +1,10 @@
 import React, { useState } from "react"
 
-import { View, Text, TextInput, TouchableOpacity, ScrollView, FlatList } from "react-native"
+import { View, Text, TextInput, TouchableOpacity, ScrollView, FlatList, Alert } from "react-native"
+import { createUserWithEmailAndPassword } from "firebase/auth"
+import auth from "../../Config"
 
-import { TextInputMask } from 'react-native-masked-text'
+import MaskInput, { Masks } from 'react-native-mask-input'
 
 import styles from "./style"
 import Title from "./Title/"
@@ -21,6 +23,18 @@ export default function Login({ navigation }) {
         confirmPassword: '',
     });
 
+    const handleCreateUser = () => {
+        createUserWithEmailAndPassword(auth, form.email, form.password)
+            .then((userCredential) => {
+                const user = userCredential.user;
+                console.log(user)
+            })
+            .catch((error) => {
+                console.log(error)
+                Alert.alert(error.message)
+            });
+    }
+
     const handleForm = (key, value) => {
         setForm((currentForm) => ({
             ...currentForm,
@@ -30,6 +44,7 @@ export default function Login({ navigation }) {
 
     const submitForm = () => {
         console.log('submit this form =>', JSON.stringify(form, false, 2));
+        handleCreateUser()
     };
 
     const [error, setError] = useState(null)
@@ -78,46 +93,45 @@ export default function Login({ navigation }) {
                         onChangeText={(value) => handleForm('email', value)}
                         autoCapitalize="none"
                     />
-                    <TextInputMask
+                    <MaskInput
                         style={styles.input}
-                        type={'cel-phone'}
-                        options={{
-                            maskType: 'BRL',
-                            withDDD: true,
-                            dddMask: '(99) ',
-                        }}
                         placeholder="Telefone"
-                        onChangeText={(value) => handleForm('phone', value)}
+                        onChangeText={(value) => {
+                            handleForm('phone', value)
+                        }}
                         keyboardType="numeric"
+                        mask={Masks.BRL_PHONE}
+                        value={form.phone}
+                        maxLength={15}
                     />
-                    <TextInputMask
+                    <MaskInput
                         style={styles.input}
-                        type={"cpf"}
                         name="cpf"
                         placeholder="CPF"
                         onChangeText={(value) => handleForm('cpf', value)}
+                        value={form.cpf}
+                        mask={Masks.BRL_CPF}
+                        keyboardType="numeric"
+                        maxLength={14}
                     />
-                    <TextInputMask
+                    <MaskInput
                         style={styles.input}
-                        type={'datetime'}
-                        options={{
-                            format: 'DD/MM/YYYY',
-                        }}
+                        name="birthDate"
                         placeholder="Data de nascimento"
                         onChangeText={(value) => handleForm('birthDate', value)}
+                        value={form.birthDate}
                         keyboardType="numeric"
+                        mask={[/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/]}
+                        maxLength={10}
                     />
-                    <TextInputMask
+                    <MaskInput
                         style={styles.input}
-                        type={'zip-code'}
-                        options={{
-                            maskType: 'BRL',
-                            withDDD: true,
-                            dddMask: '(99) ',
-                        }}
                         placeholder="CEP"
                         onChangeText={(value) => handleForm('cep', value)}
+                        value={form.cep}
                         keyboardType="numeric"
+                        mask={Masks.ZIP_CODE}
+                        maxLength={9}
                     />
                     <TextInput
                         style={styles.input}
@@ -125,6 +139,7 @@ export default function Login({ navigation }) {
                         placeholder='Senha'
                         secureTextEntry={true}
                         onChangeText={(value) => handleForm('password', value)}
+                        maxLength={32}
                     />
                     <TextInput
                         style={styles.input}
@@ -132,6 +147,7 @@ export default function Login({ navigation }) {
                         placeholder='Confirme sua Senha'
                         secureTextEntry={true}
                         onChangeText={(value) => handleForm('confirmPassword', value)}
+                        maxLength={32}
                     />
                 </View>
                 <View style={styles.boxButton}>

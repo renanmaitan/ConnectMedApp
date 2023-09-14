@@ -9,13 +9,13 @@ export default function RatingRead({ points }) {
   const starColor = "rgba(197,200,152,1)"
   return (
     <View style={styles.ratingBarStyle}>
-      {maxRating.map((item) => {
+      {maxRating.map((item, index) => {
         return (
           item <= points
-            ? <FontAwesome5 name="star" size={20} color={starColor} solid/>
+            ? <FontAwesome5 key={index} name="star" size={20} color={starColor} solid/>
             : ( points % 1 != 0 && item == Math.ceil(points)
-                ? <FontAwesome5 name="star-half-alt" size={20} color={starColor} />
-                : <FontAwesome5 name="star" size={20} color={starColor} />
+                ? <FontAwesome5 key={index} name="star-half-alt" size={20} color={starColor} />
+                : <FontAwesome5 key={index} name="star" size={20} color={starColor} />
             )
         );
       })}
