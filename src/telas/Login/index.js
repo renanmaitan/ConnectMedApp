@@ -16,14 +16,6 @@ export default function Login({ navigation }) {
 
     const handleLogin = () => {
         signInWithEmailAndPassword(auth, user, password)
-            .then((userCredential) => {
-                const user = userCredential.user;
-                console.log(user)
-                navigation.reset({
-                    index: 0,
-                    routes: [{ name: "Home" }],
-                })
-            })
             .catch((error) => {
                 console.log(error)
                 Alert.alert(error.message)

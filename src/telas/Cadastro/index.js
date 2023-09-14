@@ -24,15 +24,14 @@ export default function Login({ navigation }) {
     });
 
     const handleCreateUser = () => {
-        createUserWithEmailAndPassword(auth, form.email, form.password)
-            .then((userCredential) => {
-                const user = userCredential.user;
-                console.log(user)
+        createUserWithEmailAndPassword(email, password)
+            .then(function (result) {
+                return result.user.updateProfile({
+                    displayName: document.getElementById("name").value
+                })
+            }).catch(function (error) {
+                console.log(error);
             })
-            .catch((error) => {
-                console.log(error)
-                Alert.alert(error.message)
-            });
     }
 
     const handleForm = (key, value) => {
