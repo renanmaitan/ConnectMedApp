@@ -1,21 +1,28 @@
 import React from "react";
 
-import { View, Text } from "react-native";
+import { View, Text, Touchable } from "react-native";
 import styles from "./style";
 
-export default function Agendar({route}){
-    return(
-        <View>
-            <Text>{route.params.itemId}</Text>
-            <Text>{route.params.itemName}</Text>
-            <Text>{route.params.itemSpecialty}</Text>
-            <Text>{route.params.itemCrm}</Text>
-            <Text>{route.params.itemPrice}</Text>
-            <Text>{route.params.itemAddress}</Text>
-            <Text>{route.params.itemCity}</Text>
-            <Text>{route.params.itemCep}</Text>
-            <Text>{route.params.itemBairro}</Text>
-            <Text>{route.params.itemPhone}</Text>
+export default function Agendar({ route }) {
+    const item = route.params
+    return (
+        
+        <View style={styles.container}>
+            <View style={styles.header}>
+                <Text style={styles.headerText}>{item.itemName}</Text>
+                <Text style={styles.headerText}>{item.itemAddress}</Text>
+                <Text style={styles.headerText}>CEP: {item.itemCep}</Text>
+            </View>
+            <Text>{item.itemId}</Text>
+
+            <Text>{item.itemSpecialty}</Text>
+            <Text>{item.itemCrm}</Text>
+            <Text>{item.itemPrice}</Text>
+            
+            <Text>{item.itemCity}</Text>
+            
+            <Text>{item.itemBairro}</Text>
+            <Text>{item.itemPhone}</Text>
         </View>
     )
 }

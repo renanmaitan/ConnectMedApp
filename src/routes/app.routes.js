@@ -100,7 +100,13 @@ export default function App() {
   return (
       <Stack.Navigator initialRouteName="Home" screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Home" component={Tabs} />
-        <Stack.Screen name="Agendar" component={Agendar} />
+        <Stack.Screen name="Agendar" component={Agendar} 
+        options={{
+          headerShown: true,
+          headerStyle: styles.header,
+          headerTintColor: '#FFF',
+      }}
+        />
       </Stack.Navigator>
   )
 }
