@@ -2,21 +2,34 @@ import React, { useState, useRef } from "react";
 import { View, Text, TouchableOpacity, FlatList } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { FontAwesome5 } from "@expo/vector-icons"
+import { collection, getDocs } from "firebase/firestore";
 
 import styles from "./style";
 import Select from "../../components/Select";
 import RatingRead from "../../components/RatingRead";
+import { db } from "../../Config";
+import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 
 export default function Presencial({ navigation }) {
 
     const [data, setData] = useState(null)
 
+    const getData = async (colecao) => {
+        const list = []
+        const querySnapshot = await getDocs(collection(db, colecao));
+        querySnapshot.forEach((doc) => {
+            list.push(doc.data());
+        });
+        setData(list)
+        return list
+    }
+
     const flatlistRef = useRef()
 
     const specialities = [
-        { label: "Todas (Selecione para ver todos os profissionais disponíveis)", value: "", id: 0 },
-        { label: "Clínico Geral", value: "clinico_geral", id: 1 },
-        { label: "Dentista", value: "dentista", id: 2 },
+        { label: "Todas (Selecione para ver todos os profissionais disponíveis)", value: "", id: "todos" },
+        { label: "Clínico Geral", value: "clinico_geral", id: "clinico" },
+        { label: "Dentista", value: "dentista", id: "dentista" },
         { label: "Dermatologista", value: "dermatologista", id: 3 },
         { label: "Ginecologista", value: "ginecologista", id: 4 },
         { label: "Nutricionista", value: "nutricionista", id: 5 },
@@ -26,7 +39,7 @@ export default function Presencial({ navigation }) {
         { label: "Psicólogo", value: "psicologo", id: 9 },
         { label: "Psiquiatra", value: "psiquiatra", id: 10 },
         { label: "Urologista", value: "urologista", id: 11 },
-        { label: "Cardiologista", value: "cardiologista", id: 12 },
+        { label: "Cardiologista", value: "cardiologista", id: "cardiologista" },
         { label: "Otorrinolaringologista", value: "otorrinolaringologista", id: 13 },
         { label: "Fisioterapeuta", value: "fisioterapeuta", id: 14 },
         { label: "Fonoaudiólogo", value: "fonoaudiologo", id: 15 },
@@ -44,405 +57,6 @@ export default function Presencial({ navigation }) {
         estado: "SP",
         complemento: "",
     };
-
-    const dataClinicoGeral = [
-        {
-            id: 1,
-            name: "Doutor Fran",
-            points: 4.5,
-            specialty: "Clinico Geral",
-            phone: "(11) 99999-9999",
-            price: "R$ 100,00",
-            address: "Rua dos Bobos, 0",
-            city: "São Paulo",
-            cep: "12345678",
-            bairro: "Jd. Jardim",
-            crm: "123456",
-        },
-        {
-            id: 2,
-            name: "Doutor Fran",
-            specialty: "Clinico Geral",
-            phone: "(11) 99999-9999",
-            points: 4.5,
-            city: "São Paulo",
-            cep: "12345678",
-            bairro: "Jd. Jardim",
-            price: "R$ 100,00",
-            address: "Rua dos Bobos, 0",
-            crm: "123456",
-        },
-        {
-            id: 3,
-            name: "Doutor Fran",
-            specialty: "Clinico Geral",
-            city: "São Paulo",
-            cep: "12345678",
-            bairro: "Jd. Jardim",
-            phone: "(11) 99999-9999",
-            price: "R$ 100,00",
-            points: 4.5,
-            address: "Rua dos Bobos, 0",
-            crm: "123456",
-        },
-        {
-            id: 4,
-            name: "Doutor Fran",
-            specialty: "Clinico Geral",
-            phone: "(11) 99999-9999",
-            city: "São Paulo",
-            cep: "12345678",
-            bairro: "Jd. Jardim",
-            price: "R$ 100,00",
-            points: 4.5,
-            address: "Rua dos Bobos, 0",
-            crm: "123456",
-        },
-        {
-            id: 5,
-            name: "Doutor Fran",
-            specialty: "Clinico Geral",
-            phone: "(11) 99999-9999",
-            price: "R$ 100,00",
-            city: "São Paulo",
-            cep: "12345678",
-            points: 4.5,
-            bairro: "Jd. Jardim",
-            address: "Rua dos Bobos, 0",
-            crm: "123456",
-        },
-        {
-            id: 6,
-            name: "Doutor Fran",
-            specialty: "Clinico Geral",
-            phone: "(11) 99999-9999",
-            price: "R$ 100,00",
-            city: "São Paulo",
-            cep: "12345678",
-            bairro: "Jd. Jardim",
-            points: 4.5,
-            address: "Rua dos Bobos, 0",
-            crm: "123456",
-        },
-        {
-            id: 7,
-            name: "Doutor Fran",
-            specialty: "Clinico Geral",
-            phone: "(11) 99999-9999",
-            price: "R$ 100,00",
-            points: 4.5,
-            address: "Rua dos Bobos, 0",
-            city: "São Paulo",
-            cep: "12345678",
-            bairro: "Jd. Jardim",
-            crm: "123456",
-        },
-        {
-            id: 8,
-            name: "Doutor Fran",
-            specialty: "Clinico Geral",
-            phone: "(11) 99999-9999",
-            city: "São Paulo",
-            points: 4.5,
-            cep: "12345678",
-            bairro: "Jd. Jardim",
-            price: "R$ 100,00",
-            address: "Rua dos Bobos, 0",
-            crm: "123456",
-        },
-        {
-            id: 9,
-            name: "Doutor Fran",
-            specialty: "Clinico Geral",
-            phone: "(11) 99999-9999",
-            price: "R$ 100,00",
-            address: "Rua dos Bobos, 0",
-            city: "São Paulo",
-            cep: "12345678",
-            bairro: "Jd. Jardim",
-            points: 4.5,
-            crm: "123456",
-        },
-        {
-            id: 10,
-            name: "Doutor Fran",
-            specialty: "Clinico Geral",
-            phone: "(11) 99999-9999",
-            price: "R$ 100,00",
-            address: "Rua dos Bobos, 0",
-            points: 4.5,
-            crm: "123456",
-            city: "São Paulo",
-            cep: "12345678",
-            bairro: "Jd. Jardim",
-        },
-    ];
-
-    const dataCardiologista = [
-        {
-            id: 11,
-            name: "Doutor Fran",
-            specialty: "Cardiologista",
-            phone: "(11) 99999-9999",
-            city: "São Paulo",
-            cep: "12345678",
-            bairro: "Jd. Jardim",
-            price: "R$ 100,00",
-            address: "Rua dos Bobos, 0",
-            crm: "123456",
-            points: 4.5,
-        },
-        {
-            id: 12,
-            name: "Doutor Fran",
-            specialty: "Cardiologista",
-            city: "São Paulo",
-            cep: "12345678",
-            bairro: "Jd. Jardim",
-            phone: "(11) 99999-9999",
-            points: 4.5,
-            price: "R$ 100,00",
-            address: "Rua dos Bobos, 0",
-            crm: "123456",
-        },
-        {
-            id: 13,
-            name: "Doutor Fran",
-            specialty: "Cardiologista",
-            phone: "(11) 99999-9999",
-            city: "São Paulo",
-            cep: "12345678",
-            bairro: "Jd. Jardim",
-            points: 4.5,
-            price: "R$ 100,00",
-            address: "Rua dos Bobos, 0",
-            crm: "123456",
-        },
-        {
-            id: 14,
-            name: "Doutor Fran",
-            specialty: "Cardiologista",
-            phone: "(11) 99999-9999",
-            crm: "123456",
-            city: "São Paulo",
-            cep: "12345678",
-            bairro: "Jd. Jardim",
-            price: "R$ 100,00",
-            address: "Rua dos Bobos, 0",
-            points: 4.5,
-        },
-        {
-            id: 15,
-            name: "Doutor Fran",
-            specialty: "Cardiologista",
-            city: "São Paulo",
-            cep: "12345678",
-            bairro: "Jd. Jardim",
-            crm: "123456",
-            phone: "(11) 99999-9999",
-            price: "R$ 100,00",
-            points: 4.5,
-            address: "Rua dos Bobos, 0",
-        },
-        {
-            id: 16,
-            name: "Doutor Fran",
-            points: 4.5,
-            city: "São Paulo",
-            cep: "12345678",
-            bairro: "Jd. Jardim",
-            specialty: "Cardiologista",
-            phone: "(11) 99999-9999",
-            crm: "123456",
-            price: "R$ 100,00",
-            address: "Rua dos Bobos, 0",
-        },
-        {
-            id: 17,
-            name: "Doutor Fran",
-            specialty: "Cardiologista",
-            phone: "(11) 99999-9999",
-            price: "R$ 100,00",
-            crm: "123456",
-            address: "Rua dos Bobos, 0",
-            points: 4.5,
-            city: "São Paulo",
-            cep: "12345678",
-            bairro: "Jd. Jardim",
-        },
-        {
-            id: 18,
-            name: "Doutor Fran",
-            specialty: "Cardiologista",
-            phone: "(11) 99999-9999",
-            price: "R$ 100,00",
-            points: 4.5,
-            address: "Rua dos Bobos, 0",
-            city: "São Paulo",
-            cep: "12345678",
-            bairro: "Jd. Jardim",
-            crm: "123456",
-        },
-        {
-            id: 19,
-            name: "Doutor Fran",
-            specialty: "Cardiologista",
-            phone: "(11) 99999-9999",
-            city: "São Paulo",
-            cep: "12345678",
-            points: 4.5,
-            bairro: "Jd. Jardim",
-            crm: "123456",
-            price: "R$ 100,00",
-            address: "Rua dos Bobos, 0",
-        },
-        {
-            id: 20,
-            name: "Doutor Fran",
-            specialty: "Cardiologista",
-            phone: "(11) 99999-9999",
-            city: "São Paulo",
-            cep: "12345678",
-            bairro: "Jd. Jardim",
-            price: "R$ 100,00",
-            address: "Rua dos Bobos, 0",
-            crm: "123456",
-            points: 4.5,
-        },
-    ];
-
-    const dataDentista = [
-        {
-            id: 21,
-            name: "Doutor Fran",
-            specialty: "Dentista",
-            phone: "(11) 99999-9999",
-            price: "R$ 100,00",
-            crm: "123456",
-            points: 3.5,
-            city: "São Paulo",
-            cep: "12345678",
-            bairro: "Jd. Jardim",
-            address: "Ruaaa dos Bo b o oo o oos, 0000",
-        },
-        {
-            id: 22,
-            name: "Doutor Fran",
-            specialty: "Dentista",
-            crm: "123456",
-            phone: "(11) 99999-9999",
-            price: "R$ 100,00",
-            city: "São Paulo",
-            cep: "12345678",
-            points: 2,
-            bairro: "Jd. Jardim",
-            address: "Rua dos Bobos, 0",
-        },
-        {
-            id: 23,
-            name: "Doutor Fran",
-            specialty: "Dentista",
-            phone: "(11) 99999-9999",
-            price: "R$ 100,00",
-            city: "São Paulo",
-            points: 4.25,
-            cep: "12345678",
-            bairro: "Jd. Jardim",
-            crm: "123456",
-            address: "Rua dos Bobos, 0",
-        },
-        {
-            id: 24,
-            name: "Doutor Fran",
-            specialty: "Dentista",
-            crm: "123456",
-            phone: "(11) 99999-9999",
-            city: "São Paulo",
-            points: 5,
-            cep: "12345678",
-            bairro: "Jd. Jardim",
-            price: "R$ 100,00",
-            address: "Rua dos Bobos, 0",
-        },
-        {
-            id: 25,
-            name: "Doutor Fran",
-            specialty: "Dentista",
-            phone: "(11) 99999-9999",
-            crm: "123456",
-            city: "São Paulo",
-            cep: "12345678",
-            points: 4.5,
-            bairro: "Jd. Jardim",
-            price: "R$ 100,00",
-            address: "Rua dos Bobos, 0",
-        },
-        {
-            id: 26,
-            name: "Doutor Fran",
-            specialty: "Dentista",
-            phone: "(11) 99999-9999",
-            price: "R$ 100,00",
-            crm: "123456",
-            city: "São Paulo",
-            points: 4.5,
-            cep: "12345678",
-            bairro: "Jd. Jardim",
-            address: "Rua dos Bobos, 0",
-        },
-        {
-            id: 27,
-            name: "Doutor Fran",
-            specialty: "Dentista",
-            phone: "(11) 99999-9999",
-            crm: "123456",
-            price: "R$ 100,00",
-            address: "Rua dos Bobos, 0",
-            points: 4.5,
-            city: "São Paulo",
-            cep: "12345678",
-            bairro: "Jd. Jardim",
-        },
-        {
-            id: 28,
-            name: "Doutor Fran",
-            crm: "123456",
-            points: 4.5,
-            specialty: "Dentista",
-            phone: "(11) 99999-9999",
-            price: "R$ 100,00",
-            city: "São Paulo",
-            cep: "12345678",
-            bairro: "Jd. Jardim",
-            address: "Rua dos Bobos, 0",
-        },
-        {
-            id: 29,
-            name: "Doutor Fran",
-            crm: "123456",
-            specialty: "Dentista",
-            city: "São Paulo",
-            cep: "12345678",
-            points: 4.5,
-            bairro: "Jd. Jardim",
-            phone: "(11) 99999-9999",
-            price: "R$ 100,00",
-            address: "Rua dos Bobos, 0",
-        },
-        {
-            id: 30,
-            name: "Doutor Fran",
-            points: 4.5,
-            specialty: "Dentista",
-            city: "São Paulo",
-            cep: "12345678",
-            bairro: "Jd. Jardim",
-            phone: "(11) 99999-9999",
-            price: "R$ 100,00",
-            address: "Rua dos Bobos, 0",
-            crm: "123456",
-        },
-    ];
 
     function shuffle(array) {
         var m = array.length, t, i;
@@ -466,20 +80,13 @@ export default function Presencial({ navigation }) {
 
     //     }
 
-    function catchList(id) {
+    function catchList(filtro) {
         let vazio = false
-        if (id == 0) {
-            const dataShuffle = shuffle(dataClinicoGeral.concat(dataCardiologista, dataDentista))
-            setData(dataShuffle)
+        if (filtro == "todos") {
+            getData("todos")
         }
-        else if (id == 1) {
-            setData(dataClinicoGeral)
-        } else if (id == 12) {
-            setData(dataCardiologista)
-        } else if (id == 2) {
-            setData(dataDentista)
-        } else {
-            setData(null)
+        else{
+            getData(filtro)
         }
         data == null ? vazio = true : vazio = false
         if (vazio == false) {
@@ -508,16 +115,7 @@ export default function Presencial({ navigation }) {
                 renderItem={({ item }) => (
                     <View style={styles.itemContainer}>
                         <TouchableOpacity style={styles.item} onPress={() => navigation.navigate("Agendar", {
-                            itemId: item.id,
-                            itemName: item.name,
-                            itemSpecialty: item.specialty,
-                            itemCrm: item.crm,
-                            itemPrice: item.price,
-                            itemAddress: item.address,
-                            itemCity: item.city,
-                            itemCep: item.cep,
-                            itemBairro: item.bairro,
-                            itemPhone: item.phone,
+                            item: item
                         })}>
                             <LinearGradient
                                 start={{ x: 0, y: 1 }} end={{ x: 1, y: 0 }}
@@ -528,7 +126,7 @@ export default function Presencial({ navigation }) {
                                 <View style={styles.topCard}>
                                     <View>
                                         <Text style={styles.itemTitle}>{item.name}</Text>
-                                        <Text style={styles.itemSubTitle}>{item.specialty} | CRM {item.crm}</Text>
+                                        <Text style={styles.itemSubTitle}>{item.specialty} | {item.cro ? `CRO: ${item.cro}` : item.crm ? `CRM: ${item.crm}` : ''}</Text>
                                     </View>
                                     <RatingRead points={item.points} />
                                 </View>
@@ -541,7 +139,7 @@ export default function Presencial({ navigation }) {
                                         </View>
                                         <View style={styles.bodyContent}>
                                             <FontAwesome5 name="coins" size={16} color="#fff" />
-                                            <Text style={styles.itemText}>{item.price}</Text>
+                                            <Text style={styles.itemText}>{item.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</Text>
                                         </View>
                                         <View style={styles.bodyContent}>
                                             <FontAwesome5 name="map-marker-alt" size={16} color="#fff" />

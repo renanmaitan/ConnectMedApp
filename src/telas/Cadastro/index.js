@@ -27,7 +27,7 @@ export default function Login({ navigation }) {
         createUserWithEmailAndPassword(auth, form.email, form.password)
             .then((userCredential) => {
                 const user = userCredential.user;
-                console.log(user)
+                console.log(user.uid)
             })
             .catch((error) => {
                 console.log(error)
