@@ -80,10 +80,27 @@ export default function Presencial({ navigation }) {
 
     //     }
 
-    function catchList(filtro) {
+    async function catchList(filtro) {
         let vazio = false
         if (filtro == "todos") {
-            getData("todos")
+            let list = []
+            list.push(await getData("clinico"))
+            list.push(await getData("dentista"))
+            list.push(await getData("cardiologista"))
+            let newList = []
+            list.map((item) => {
+                newList.push(...item)
+            })
+            shuffle(newList)
+            setData(newList)
+            // Promise.all(list).then((values) => {
+            //     let newList = []
+            //     values.map((item) => {
+            //         newList.push(...item)
+            //     })
+            //     shuffle(newList)
+            //     setData(newList)
+            // })
         }
         else{
             getData(filtro)
