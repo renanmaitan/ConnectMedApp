@@ -2,49 +2,58 @@ import React, { useState, useRef } from "react";
 import { View, Text, TouchableOpacity, FlatList } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { FontAwesome5 } from "@expo/vector-icons"
-import { collection, getDocs } from "firebase/firestore";
 
 import styles from "./style";
 import Select from "../../components/Select";
 import RatingRead from "../../components/RatingRead";
+import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "../../Config";
-import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 
 export default function Presencial({ navigation }) {
 
     const [data, setData] = useState(null)
 
-    const getData = async (colecao) => {
-        const list = []
-        const querySnapshot = await getDocs(collection(db, colecao));
+    const getDoctorsSpecialty = async (specialty) => {
+        const q = query(collection(db, "medicos"), where("specialty", "==", specialty));
+        const querySnapshot = await getDocs(q);
+        let list = []
         querySnapshot.forEach((doc) => {
-            list.push(doc.data());
+            list.push(doc.data())
         });
-        setData(list)
+        return list
+    }
+
+    const getDoctors = async () => {
+        const q = query(collection(db, "medicos"));
+        const querySnapshot = await getDocs(q);
+        let list = []
+        querySnapshot.forEach((doc) => {
+            list.push(doc.data())
+        });
         return list
     }
 
     const flatlistRef = useRef()
 
     const specialities = [
-        { label: "Todas (Selecione para ver todos os profissionais disponíveis)", value: "", id: "todos" },
-        { label: "Clínico Geral", value: "clinico_geral", id: "clinico" },
-        { label: "Dentista", value: "dentista", id: "dentista" },
-        { label: "Dermatologista", value: "dermatologista", id: 3 },
-        { label: "Ginecologista", value: "ginecologista", id: 4 },
-        { label: "Nutricionista", value: "nutricionista", id: 5 },
-        { label: "Oftalmologista", value: "oftalmologista", id: 6 },
-        { label: "Ortopedista", value: "ortopedista", id: 7 },
-        { label: "Pediatra", value: "pediatra", id: 8 },
-        { label: "Psicólogo", value: "psicologo", id: 9 },
-        { label: "Psiquiatra", value: "psiquiatra", id: 10 },
-        { label: "Urologista", value: "urologista", id: 11 },
-        { label: "Cardiologista", value: "cardiologista", id: "cardiologista" },
-        { label: "Otorrinolaringologista", value: "otorrinolaringologista", id: 13 },
-        { label: "Fisioterapeuta", value: "fisioterapeuta", id: 14 },
-        { label: "Fonoaudiólogo", value: "fonoaudiologo", id: 15 },
-        { label: "Neurologista", value: "neurologista", id: 16 },
-        { label: "Endocrinologista", value: "endocrinologista", id: 17 },
+        { label: "Todas (Selecione para ver todos os profissionais disponíveis)", id: "todos" },
+        { label: "Clínico Geral", id: "Clínico Geral" },
+        { label: "Dentista", id: "Dentista" },
+        { label: "Dermatologista", id: "Dermatologista" },
+        { label: "Ginecologista", id: "Ginecologista" },
+        { label: "Nutricionista", id: "Nutricionista" },
+        { label: "Oftalmologista", id: "Oftalmologista" },
+        { label: "Ortopedista", id: "Ortopedista" },
+        { label: "Pediatra", id: "Pediatra" },
+        { label: "Psicólogo", id: "Psicologo" },
+        { label: "Psiquiatra", id: "Psiquiatra" },
+        { label: "Urologista", id: "Urologista" },
+        { label: "Cardiologista", id: "Cardiologista" },
+        { label: "Otorrinolaringologista", id: "Otorrinolaringologista" },
+        { label: "Fisioterapeuta", id: "Fisioterapeuta" },
+        { label: "Fonoaudiólogo", id: "Fonoaudiologo" },
+        { label: "Neurologista", id: "Neurologista" },
+        { label: "Endocrinologista", id: "Endocrinologista" },
     ];
 
     const endereco = {
@@ -60,54 +69,28 @@ export default function Presencial({ navigation }) {
 
     function shuffle(array) {
         var m = array.length, t, i;
-
-        // While there remain elements to shuffle…
         while (m) {
-
-            // Pick a remaining element…
             i = Math.floor(Math.random() * m--);
-
-            // And swap it with the current element.
             t = array[m];
             array[m] = array[i];
             array[i] = t;
         }
-
         return array;
     }
-
-    //     function validarCrm(numCrm) {
-
-    //     }
 
     async function catchList(filtro) {
         let vazio = false
         if (filtro == "todos") {
-            let list = []
-            list.push(await getData("clinico"))
-            list.push(await getData("dentista"))
-            list.push(await getData("cardiologista"))
-            let newList = []
-            list.map((item) => {
-                newList.push(...item)
-            })
-            shuffle(newList)
-            setData(newList)
-            // Promise.all(list).then((values) => {
-            //     let newList = []
-            //     values.map((item) => {
-            //         newList.push(...item)
-            //     })
-            //     shuffle(newList)
-            //     setData(newList)
-            // })
+            setData(shuffle(await getDoctors()))
         }
-        else{
-            getData(filtro)
+        else {
+            setData(await getDoctorsSpecialty(filtro))
         }
         data == null ? vazio = true : vazio = false
         if (vazio == false) {
-            flatlistRef.current.scrollToIndex({ animated: true, index: 0 })
+            if (flatlistRef.current) {
+                flatlistRef.current.scrollToIndex({ animated: true, index: 0 })
+            }
         }
     }
 
@@ -125,54 +108,61 @@ export default function Presencial({ navigation }) {
                     <Select options={specialities} onChangeSelect={(id) => catchList(id)} text="Selecione uma especialidade"></Select>
                 </View>
             </View>
-            <FlatList
-                ref={flatlistRef}
-                data={data}
-                keyExtractor={(item) => String(item.id)}
-                renderItem={({ item }) => (
-                    <View style={styles.itemContainer}>
-                        <TouchableOpacity style={styles.item} onPress={() => navigation.navigate("Agendar", {
-                            item: item
-                        })}>
-                            <LinearGradient
-                                start={{ x: 0, y: 1 }} end={{ x: 1, y: 0 }}
-                                locations={[0, 0.2, 0.8]}
-                                colors={["#68a4b3", "#0c6577", "#11687c"]}
-                                style={styles.itemGradient}
-                            >
-                                <View style={styles.topCard}>
-                                    <View>
-                                        <Text style={styles.itemTitle}>{item.name}</Text>
-                                        <Text style={styles.itemSubTitle}>{item.specialty} | {item.cro ? `CRO: ${item.cro}` : item.crm ? `CRM: ${item.crm}` : ''}</Text>
+            {data && data.length > 0 ? (
+                <FlatList
+                    ref={flatlistRef}
+                    data={data}
+                    keyExtractor={(item) => String(item.id)}
+                    renderItem={({ item }) => (
+                        <View style={styles.itemContainer}>
+                            <TouchableOpacity style={styles.item} onPress={() => navigation.navigate("Agendar", {
+                                item: item
+                            })}>
+                                <LinearGradient
+                                    start={{ x: 0, y: 1 }} end={{ x: 1, y: 0 }}
+                                    locations={[0, 0.2, 0.8]}
+                                    colors={["#68a4b3", "#0c6577", "#11687c"]}
+                                    style={styles.itemGradient}
+                                >
+                                    <View style={styles.topCard}>
+                                        <View>
+                                            <Text style={styles.itemTitle}>{item.name}</Text>
+                                            <Text style={styles.itemSubTitle}>{item.specialty} | {item.cro ? `CRO: ${item.cro}` : item.crm ? `CRM: ${item.crm}` : ''}</Text>
+                                        </View>
+                                        <RatingRead points={item.points} />
                                     </View>
-                                    <RatingRead points={item.points} />
-                                </View>
-                                <View style={styles.bodyCard}>
-                                    <FontAwesome5 name="user-md" size={50} color="#4aacc4" />
-                                    <View style={styles.bodyContainer}>
-                                        <View style={styles.bodyContent}>
-                                            <FontAwesome5 name="whatsapp" size={16} color="#fff" />
-                                            <Text style={styles.itemText}>{item.phone}</Text>
-                                        </View>
-                                        <View style={styles.bodyContent}>
-                                            <FontAwesome5 name="coins" size={16} color="#fff" />
-                                            <Text style={styles.itemText}>{item.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</Text>
-                                        </View>
-                                        <View style={styles.bodyContent}>
-                                            <FontAwesome5 name="map-marker-alt" size={16} color="#fff" />
-                                            <Text style={styles.itemText} numberOfLines={1}>{item.address}</Text>
+                                    <View style={styles.bodyCard}>
+                                        <FontAwesome5 name="user-md" size={50} color="#4aacc4" />
+                                        <View style={styles.bodyContainer}>
+                                            <View style={styles.bodyContent}>
+                                                <FontAwesome5 name="whatsapp" size={16} color="#fff" />
+                                                <Text style={styles.itemText}>{item.phone}</Text>
+                                            </View>
+                                            <View style={styles.bodyContent}>
+                                                <FontAwesome5 name="coins" size={16} color="#fff" />
+                                                <Text style={styles.itemText}>{item.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</Text>
+                                            </View>
+                                            <View style={styles.bodyContent}>
+                                                <FontAwesome5 name="map-marker-alt" size={16} color="#fff" />
+                                                <Text style={styles.itemText} numberOfLines={1}>{item.address}</Text>
+                                            </View>
                                         </View>
                                     </View>
-                                </View>
-                                <Text style={styles.itemFooter}>Clique nesse cartão para agendar e/ou ver mais detalhes</Text>
+                                    <Text style={styles.itemFooter}>Clique nesse cartão para agendar e/ou ver mais detalhes</Text>
 
-                            </LinearGradient>
-                        </TouchableOpacity>
-                    </View>
-                )
-                }
-                style={styles.flatList}
-            />
+                                </LinearGradient>
+                            </TouchableOpacity>
+                        </View>
+                    )
+                    }
+                    style={styles.flatList}
+                />
+            ) : (
+                <View style={styles.emptyContainer}>
+                    <Text style={styles.emptyText}
+                    >Não há médicos disponíveis para a especialidade selecionada</Text>
+                </View>
+            )}
         </View>
     );
 }

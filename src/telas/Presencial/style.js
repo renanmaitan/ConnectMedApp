@@ -92,4 +92,14 @@ export default styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between",
     },
+    emptyContainer: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    emptyText: {
+        fontSize: 16,
+        fontWeight: "bold",
+        textAlign: "center",
+    },
 });

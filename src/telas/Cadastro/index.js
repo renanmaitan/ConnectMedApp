@@ -2,10 +2,12 @@ import React, { useState } from "react"
 
 import { View, Text, TextInput, TouchableOpacity, ScrollView, FlatList, Alert } from "react-native"
 import { createUserWithEmailAndPassword } from "firebase/auth"
+import { collection, addDoc } from "firebase/firestore";
 import auth from "../../Config"
 
 import MaskInput, { Masks } from 'react-native-mask-input'
 
+import { db } from "../../Config";
 import styles from "./style"
 import Title from "./Title/"
 import Logo from "./Logo"
@@ -23,17 +25,24 @@ export default function Login({ navigation }) {
         confirmPassword: '',
     });
 
-    const handleCreateUser = () => {
-        createUserWithEmailAndPassword(auth, form.email, form.password)
-            .then((userCredential) => {
-                const user = userCredential.user;
-                console.log(user.uid)
-            })
-            .catch((error) => {
-                console.log(error)
-                Alert.alert(error.message)
-            });
-    }
+    const handleCreateUser = async () => {
+        try {
+          const userCredential = await createUserWithEmailAndPassword(auth, form.email, form.password);
+          const user = userCredential.user;
+      
+          const docRef = await addDoc(collection(db, "users"), {
+            name: form.name,
+            birthDate: form.birthDate,
+            cpf: form.cpf,
+            phone: form.phone,
+            cep: form.cep,
+            uid: user.uid,
+          });
+        } catch (error) {
+          console.error(error);
+          Alert.alert(error.message);
+        }
+      };
 
     const handleForm = (key, value) => {
         setForm((currentForm) => ({
@@ -43,7 +52,6 @@ export default function Login({ navigation }) {
     };
 
     const submitForm = () => {
-        console.log('submit this form =>', JSON.stringify(form, false, 2));
         handleCreateUser()
     };
 

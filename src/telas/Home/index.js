@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useEffect, useState, useContext } from "react";
 
 import { Text, View, TouchableOpacity } from "react-native";
 import styles from "./style";
 import ListaHorizontal from "../../components/ListaHorizontal";
 import { LinearGradient } from "expo-linear-gradient";
+import UserContext from "../../contexts/userData";
+import Loading from "../../components/Loading";
+import { ScrollView } from "react-native";
 
 export default function Login({ navigation }) {
     const dataHistory = [
@@ -79,34 +82,52 @@ export default function Login({ navigation }) {
             address: "Rua dos Bobos, 2",
         },
     ];
+
+    const [loading, setLoading] = useState(true);
+
+    const { userDatas } = useContext(UserContext);
+
+    useEffect(() => {
+        if (Object.keys(userDatas).length > 0) {
+            setLoading(false);
+        }
+    }, [userDatas])
+
+    if (loading) {
+        return <Loading />
+    }
+
     return (
-        <View style={styles.container}>
-            <LinearGradient
-                colors={['#086972', 'transparent']}
-                style={styles.scrollview}
-            >
-                <Text style={styles.title}>Olá, Renan!</Text>
-                <View style={styles.carousel}>
-                    <Text style={styles.carouselTitle}>Seus agendamentos:</Text>
-                    <View style={styles.carouselBody}>
-                        <ListaHorizontal data={data} />
+        <ScrollView>
+
+            <View style={styles.container}>
+                <LinearGradient
+                    colors={['#086972', 'transparent']}
+                    style={styles.scrollview}
+                >
+                    <Text style={styles.title}>Olá, {userDatas?.name.split(" ")[0]}!</Text>
+                    <View style={styles.carousel}>
+                        <Text style={styles.carouselTitle}>Seus agendamentos:</Text>
+                        <View style={styles.carouselBody}>
+                            <ListaHorizontal data={data} />
+                        </View>
                     </View>
-                </View>
-                <View style={styles.carousel}>
-                    <Text style={styles.carouselTitle}>Seu histórico:</Text>
-                    <View style={styles.carouselBody}>
-                        <ListaHorizontal data={dataHistory} type='history' />
+                    <View style={styles.carousel}>
+                        <Text style={styles.carouselTitle}>Seu histórico:</Text>
+                        <View style={styles.carouselBody}>
+                            <ListaHorizontal data={dataHistory} type='history' />
+                        </View>
                     </View>
-                </View>
-                <View style={styles.buttons}>
-                    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Médicos')}>
-                        <Text style={styles.textButton}>Agendar Consulta</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.buttonRed}>
-                        <Text style={styles.textButton}>Cancelar Agendamento</Text>
-                    </TouchableOpacity>
-                </View>
-            </LinearGradient>
-        </View>
+                    <View style={styles.buttons}>
+                        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Médicos')}>
+                            <Text style={styles.textButton}>Agendar Consulta</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.buttonRed}>
+                            <Text style={styles.textButton}>Cancelar Agendamento</Text>
+                        </TouchableOpacity>
+                    </View>
+                </LinearGradient>
+            </View>
+        </ScrollView>
     );
 }

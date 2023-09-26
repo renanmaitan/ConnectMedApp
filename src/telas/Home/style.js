@@ -75,6 +75,7 @@ const styles = StyleSheet.create({
         marginTop: "4%",
         width: '60%',
         alignItems: 'center',
+        marginBottom: "10%",
     },
     textButton: {
         fontFamily: 'sans-serif-light',

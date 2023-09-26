@@ -59,4 +59,11 @@ export default styles = StyleSheet.create({
         fontWeight: "bold",
         fontFamily: "sans-serif-light",
     },
+    title: {
+        fontSize: 24,
+        fontWeight: "bold",
+        fontFamily: "sans-serif-light",
+        color: "#FEFEFE",
+        marginBottom: "5%",
+    },
 })
