@@ -37,7 +37,7 @@ export default function Select({ options, onChangeSelect, text }) {
                 <SafeAreaView>
                     <View style={styles.headerModal}>
                         <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.backModal}>
-                            <FontAwesome5 name="chevron-left" size={20} color="#555"/>
+                            <FontAwesome5 name="chevron-left" size={20} color="#555" style={{padding: "1%"}}/>
                         </TouchableOpacity>
                         <Text style={styles.modalTitle}>{text}</Text>
                         <TouchableOpacity onPress={() => setModalVisible(false)}>
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         fontSize: 16,
         borderWidth: 1,
-        borderColor: "#000",
+        borderColor: "#086972",
         flexDirection: "row",
     },
     txt: {

@@ -18,16 +18,17 @@ const styles = StyleSheet.create({
     },
     boxInput:{
         width: '75%',
+        marginBottom: "3.5%",
     },
     boxButton:{
         marginBottom: "3%",
-        marginTop: "3%",
-        width: '40%',
+        width: '60%',
     },
     error:{
         color: 'red',
         fontWeight: 'bold',
         marginBottom: "3.5%",
+        textAlign: 'center',
     },
     boxMessage:{
         marginBottom: "10%",
@@ -51,6 +52,7 @@ const styles = StyleSheet.create({
         fontFamily: 'sans-serif-light',
         fontWeight: 'bold',
         fontSize: 16,
+        textAlign: 'center',
     },
     logoImg: {
         flex: 1,

@@ -4,8 +4,19 @@ import { StyleSheet } from "react-native"
 
 import Login from "../telas/Login"
 import Cadastro from "../telas/Cadastro"
+import CadastroMedico from "../telas/CadastroMedico"
 
 const AuthStack = createStackNavigator()
+const RegisterStack = createStackNavigator()
+
+export function RegisterRoutes() {
+    return (
+        <RegisterStack.Navigator initialRouteName="Cadastro" screenOptions={{ headerShown: false }}>
+            <RegisterStack.Screen name="Cadastro" component={Cadastro} />
+            <RegisterStack.Screen name="CadastroMedico" component={CadastroMedico} />
+        </RegisterStack.Navigator>
+    )
+}
 
 export default function AuthRoutes() {
     return (
@@ -16,8 +27,9 @@ export default function AuthRoutes() {
                     headerShown: true,
                     headerStyle: styles.header,
                     headerTintColor: '#FFF',
+                    title: 'Cadastro',
                 }}
-                name="Cadastro" component={Cadastro}
+                name="CadastroRoutes" component={RegisterRoutes}
             />
         </AuthStack.Navigator>
     )

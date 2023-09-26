@@ -35,26 +35,23 @@ export default function Presencial({ navigation }) {
 
     const flatlistRef = useRef()
 
-    const specialities = [
-        { label: "Todas (Selecione para ver todos os profissionais disponíveis)", id: "todos" },
-        { label: "Clínico Geral", id: "Clínico Geral" },
-        { label: "Dentista", id: "Dentista" },
-        { label: "Dermatologista", id: "Dermatologista" },
-        { label: "Ginecologista", id: "Ginecologista" },
-        { label: "Nutricionista", id: "Nutricionista" },
-        { label: "Oftalmologista", id: "Oftalmologista" },
-        { label: "Ortopedista", id: "Ortopedista" },
-        { label: "Pediatra", id: "Pediatra" },
-        { label: "Psicólogo", id: "Psicologo" },
-        { label: "Psiquiatra", id: "Psiquiatra" },
-        { label: "Urologista", id: "Urologista" },
-        { label: "Cardiologista", id: "Cardiologista" },
-        { label: "Otorrinolaringologista", id: "Otorrinolaringologista" },
-        { label: "Fisioterapeuta", id: "Fisioterapeuta" },
-        { label: "Fonoaudiólogo", id: "Fonoaudiologo" },
-        { label: "Neurologista", id: "Neurologista" },
-        { label: "Endocrinologista", id: "Endocrinologista" },
-    ];
+    const getSpecialty = async () => {
+        const q = collection(db, "specialty");
+        const querySnapshot = await getDocs(q);
+        let list = []
+        querySnapshot.forEach((doc) => {
+            list.push(doc.data())
+        });
+        return list
+    }
+
+    const [specialities, setSpecialities] = useState([])
+
+    useState(() => {
+        getSpecialty().then((res) => {
+            setSpecialities(res)
+        })
+    }, [])
 
     const endereco = {
         cep: "12345678",

@@ -1,15 +1,15 @@
-import React, { useState } from "react"
+import React, { useRef, useState } from "react"
 
 import { View, Text, TextInput, TouchableOpacity, ScrollView, FlatList, Alert } from "react-native"
 import { createUserWithEmailAndPassword } from "firebase/auth"
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, doc } from "firebase/firestore";
 import auth from "../../Config"
 
 import MaskInput, { Masks } from 'react-native-mask-input'
+import * as validate from "./utils";
 
 import { db } from "../../Config";
 import styles from "./style"
-import Title from "./Title/"
 import Logo from "./Logo"
 
 export default function Login({ navigation }) {
@@ -24,25 +24,27 @@ export default function Login({ navigation }) {
         password: '',
         confirmPassword: '',
     });
+    const [error, setError] = useState(null)
+    const scrollViewRef = useRef();
 
     const handleCreateUser = async () => {
         try {
-          const userCredential = await createUserWithEmailAndPassword(auth, form.email, form.password);
-          const user = userCredential.user;
-      
-          const docRef = await addDoc(collection(db, "users"), {
-            name: form.name,
-            birthDate: form.birthDate,
-            cpf: form.cpf,
-            phone: form.phone,
-            cep: form.cep,
-            uid: user.uid,
-          });
+            const userCredential = await createUserWithEmailAndPassword(auth, form.email, form.password);
+            const user = userCredential.user;
+
+            const docRef = await addDoc(collection(db, "users"), {
+                name: form.name,
+                birthDate: form.birthDate,
+                cpf: form.cpf,
+                phone: form.phone,
+                cep: form.cep,
+                uid: user.uid,
+            });
         } catch (error) {
-          console.error(error);
-          Alert.alert(error.message);
+            console.error(error);
+            Alert.alert(error.message);
         }
-      };
+    };
 
     const handleForm = (key, value) => {
         setForm((currentForm) => ({
@@ -52,36 +54,65 @@ export default function Login({ navigation }) {
     };
 
     const submitForm = () => {
-        handleCreateUser()
+        if (validation()) {
+            handleCreateUser();
+        }
     };
 
-    const [error, setError] = useState(null)
+    const doctorRegister = async () => {
+        if (validation()) {
+            navigation.navigate('CadastroMedico', { form: form });
+        }
+    }
 
     function validation() {
-        if (user == null || password == null) {
-            setError('Preencha os campos*')
-        } else if (user == "" || password == "") {
-            setError('Preencha os campos')
-        } else if (user.indexOf(' ') >= 0 || password.indexOf(' ') >= 0) {
-            setError('Não use espaços em branco')
+        setError(null);
+        const errors = [];
+        if (form.name === "") {
+            errors.push('*Preencha o campo "Nome Completo"');
+        }
+        if (form.email === "") {
+            errors.push('*Preencha o campo "E-mail"');
+        } else if (!validate.validateEmail(form.email)) {
+            errors.push('*E-mail inválido');
+        }
+        if (form.birthDate === "" || !validate.validateDate(form.birthDate)) {
+            errors.push('*Data de nascimento inválida');
+        }
+        if (form.cpf === "" || !validate.validateCpf(form.cpf)) {
+            errors.push('*CPF inválido');
+        }
+        if (form.phone === "" || !validate.validatePhone(form.phone)) {
+            errors.push('*Telefone inválido');
+        }
+        if (form.cep === "" || !validate.validateCep(form.cep)) {
+            errors.push('*CEP inválido');
+        }
+        if (form.password === "" || !validate.validatePassword(form.password)) {
+            errors.push('*Senha inválida');
+        }
+        if (!validate.validateConfirmPassword(form.password, form.confirmPassword)) {
+            errors.push('*As senhas não conferem');
+        }
+        if (errors.length > 0) {
+            setError(errors.join('\n'));
+            scrollViewRef.current.scrollTo({ x: 0, y: 0, animated: true });
+            return false;
         } else {
             setError(null);
-            navigation.reset({
-                index: 0,
-                routes: [{ name: "Home" }],
-            })
+            return true;
         }
     }
 
     return (
         <ScrollView
+            ref={scrollViewRef}
             showsHorizontalScrollIndicator={false}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={styles.scrollview}
         >
             <View style={styles.container}>
                 <Logo />
-                <Title />
                 <View>
                     <Text style={styles.error}>{error}</Text>
                 </View>
@@ -162,7 +193,13 @@ export default function Login({ navigation }) {
                     <TouchableOpacity
                         onPress={submitForm}
                         style={styles.button}
-                    ><Text style={styles.textButton}>Cadastrar</Text></TouchableOpacity>
+                    ><Text style={styles.textButton}>Cadastrar como paciente</Text></TouchableOpacity>
+                </View>
+                <View style={styles.boxButton}>
+                    <TouchableOpacity
+                        onPress={doctorRegister}
+                        style={[styles.button, { backgroundColor: '#064f14' }]}
+                    ><Text style={styles.textButton}>Continuar cadastro como médico</Text></TouchableOpacity>
                 </View>
                 <View style={styles.boxMessage}>
                     <Text

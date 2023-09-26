@@ -75,7 +75,7 @@ export default function Login({ navigation }) {
             </View>
             <View style={styles.boxMessage}>
                 <Text
-                    onPress={() => navigation.navigate('Cadastro')}
+                    onPress={() => navigation.navigate('CadastroRoutes')}
                     style={styles.message}
                 >Ainda não possui conta? Cadastre-se</Text>
             </View>
