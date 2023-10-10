@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react"
+import React, { useRef, useState, useEffect } from "react"
 
 import { View, Text, TextInput, TouchableOpacity, ScrollView, FlatList, Alert } from "react-native"
 import { createUserWithEmailAndPassword } from "firebase/auth"
@@ -63,9 +63,21 @@ export default function Login({ navigation }) {
 
     const doctorRegister = async () => {
         if (validation()) {
-            navigation.navigate('CadastroMedico', form);
+            if (form.isDoctor === true) {
+                navigation.navigate('CadastroMedico', form);
+            }
+            setForm((currentForm) => ({
+                ...currentForm,
+                isDoctor: true,
+            }));
         }
     }
+
+    useEffect(() => {
+        if (form.isDoctor === true) {
+            navigation.navigate('CadastroMedico', form);
+        }
+    }, [form.isDoctor]);
 
     function validation() {
         setError(null);

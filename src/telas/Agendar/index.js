@@ -22,7 +22,7 @@ export default function Agendar({ route }) {
                                 <View style={styles.topCard}>
                                     <View>
                                         <Text style={styles.itemTitle}>{item.name}</Text>
-                                        <Text style={styles.itemSubTitle}>{item.specialty} | {item.cro ? `CRO: ${item.cro}` : item.crm ? `CRM: ${item.crm}` : ''}</Text>
+                                        <Text style={styles.itemSubTitle}>{item.specialty} | {item.register}</Text>
                                     </View>
                                     <RatingRead points={item.points} />
                                 </View>

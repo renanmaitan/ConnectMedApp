@@ -14,7 +14,7 @@ export default function Presencial({ navigation }) {
     const [data, setData] = useState(null)
 
     const getDoctorsSpecialty = async (specialty) => {
-        const q = query(collection(db, "medicos"), where("specialty", "==", specialty));
+        const q = query(collection(db, "users"), where("specialty", "==", specialty));
         const querySnapshot = await getDocs(q);
         let list = []
         querySnapshot.forEach((doc) => {
@@ -24,7 +24,7 @@ export default function Presencial({ navigation }) {
     }
 
     const getDoctors = async () => {
-        const q = query(collection(db, "medicos"));
+        const q = query(collection(db, "users"), where("isDoctor", "==", true));
         const querySnapshot = await getDocs(q);
         let list = []
         querySnapshot.forEach((doc) => {
@@ -124,7 +124,7 @@ export default function Presencial({ navigation }) {
                                     <View style={styles.topCard}>
                                         <View>
                                             <Text style={styles.itemTitle}>{item.name}</Text>
-                                            <Text style={styles.itemSubTitle}>{item.specialty} | {item.cro ? `CRO: ${item.cro}` : item.crm ? `CRM: ${item.crm}` : ''}</Text>
+                                            <Text style={styles.itemSubTitle}>{item.specialty} | {item.register}</Text>
                                         </View>
                                         <RatingRead points={item.points} />
                                     </View>

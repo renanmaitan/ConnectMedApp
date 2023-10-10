@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
         padding: "4%",
         width: "82%",
         alignItems: "center",
-        marginVertical: "2%",
+        marginVertical: "10%",
     },
     input: {
         borderWidth: 1,
