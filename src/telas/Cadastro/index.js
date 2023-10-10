@@ -23,6 +23,7 @@ export default function Login({ navigation }) {
         cep: '',
         password: '',
         confirmPassword: '',
+        isDoctor: false,
     });
     const [error, setError] = useState(null)
     const scrollViewRef = useRef();
@@ -39,6 +40,7 @@ export default function Login({ navigation }) {
                 phone: form.phone,
                 cep: form.cep,
                 uid: user.uid,
+                isDoctor: form.isDoctor,
             });
         } catch (error) {
             console.error(error);
@@ -61,7 +63,7 @@ export default function Login({ navigation }) {
 
     const doctorRegister = async () => {
         if (validation()) {
-            navigation.navigate('CadastroMedico', { form: form });
+            navigation.navigate('CadastroMedico', form);
         }
     }
 

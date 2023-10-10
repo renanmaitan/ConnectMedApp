@@ -2,13 +2,12 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
     select: {
-        alignItems: "center",
+        margin: "20%",
     },
     text: {
         fontSize: 16,
         color: "black",
         fontWeight: "bold",
-        marginBottom: 10,
     },
     container:{
         flex: 1,
@@ -18,18 +17,22 @@ const styles = StyleSheet.create({
         width: "100%",
     },
     button:{
+        backgroundColor: "#086972",
+        borderRadius: 20,
         padding: "4%",
+        width: "82%",
+        alignItems: "center",
+        marginVertical: "2%",
     },
     input: {
         borderWidth: 1,
         borderColor: '#086972',
         borderRadius: 20,
         padding: "2%",
-        marginBottom: "3.5%",
         width: '82%',
         backgroundColor: '#FEFEFE',
-        paddingStart: "10%",
-        marginTop: "3.5%",
+        paddingStart: "5%",
+        marginVertical: "2%",
     },
 });
 
