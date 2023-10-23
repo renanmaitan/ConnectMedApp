@@ -45,56 +45,54 @@ export default function Account({ navigation }) {
     }
 
     return (
-        <ScrollView>
-            <View style={styles.container}>
-                <LinearGradient
-                    colors={['#086972', 'transparent']}
-                    style={styles.scrollview}
+        <View style={styles.container}>
+            <LinearGradient
+                colors={['#086972', 'transparent']}
+                style={styles.scrollview}
+            >
+                <FontAwesome5 name="user-circle" color="#B1B1B1" size={100} style={{ marginBottom: "5%", marginTop: "5%" }} />
+                <Text style={styles.title}>Alterar Dados</Text>
+                <TouchableOpacity style={styles.containerField}>
+                    <View style={styles.labelField}>
+                        <Text style={styles.titleField}>Nome</Text>
+                        <Text style={styles.contentField}>{userDatas.name}</Text>
+                    </View>
+                    <FontAwesome5 name="chevron-right" color="#B1B1B1" size={20} />
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.containerField}>
+                    <View style={styles.labelField}>
+                        <Text style={styles.titleField}>Email</Text>
+                        <Text style={styles.contentField}>{user.email}</Text>
+                    </View>
+                    <FontAwesome5 name="chevron-right" color="#B1B1B1" size={20} />
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.containerField}>
+                    <View style={styles.labelField}>
+                        <Text style={styles.titleField}>CEP</Text>
+                        <Text style={styles.contentField}>{userDatas.cep}</Text>
+                    </View>
+                    <FontAwesome5 name="chevron-right" color="#B1B1B1" size={20} />
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.containerField}>
+                    <View style={styles.labelField}>
+                        <Text style={[styles.titleField, { paddingVertical: "3%" }]}>Senha</Text>
+                    </View>
+                    <FontAwesome5 name="chevron-right" color="#B1B1B1" size={20} />
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={handleLogout}
                 >
-                    <FontAwesome5 name="user-circle" color="#B1B1B1" size={100} style={{ marginBottom: "5%", marginTop: "5%" }} />
-                    <Text style={styles.title}>Alterar Dados</Text>
-                    <TouchableOpacity style={styles.containerField}>
-                        <View style={styles.labelField}>
-                            <Text style={styles.titleField}>Nome</Text>
-                            <Text style={styles.contentField}>{userDatas.name}</Text>
-                        </View>
-                        <FontAwesome5 name="chevron-right" color="#B1B1B1" size={20} />
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.containerField}>
-                        <View style={styles.labelField}>
-                            <Text style={styles.titleField}>Email</Text>
-                            <Text style={styles.contentField}>{user.email}</Text>
-                        </View>
-                        <FontAwesome5 name="chevron-right" color="#B1B1B1" size={20} />
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.containerField}>
-                        <View style={styles.labelField}>
-                            <Text style={styles.titleField}>CEP</Text>
-                            <Text style={styles.contentField}>{userDatas.cep}</Text>
-                        </View>
-                        <FontAwesome5 name="chevron-right" color="#B1B1B1" size={20} />
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.containerField}>
-                        <View style={styles.labelField}>
-                            <Text style={[styles.titleField, { paddingVertical: "3%" }]}>Senha</Text>
-                        </View>
-                        <FontAwesome5 name="chevron-right" color="#B1B1B1" size={20} />
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={styles.button}
-                        onPress={handleLogout}
-                    >
-                        <Text style={styles.buttonText}>Sair</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={{ marginTop: "5%", marginBottom: "10%" }}
-                        onPress={handleDeleteUser}
-                    >
-                        <Text style={[styles.buttonText, { color: "red", fontSize: 16, textDecorationLine: "underline" }]}>Excluir Conta</Text>
-                    </TouchableOpacity>
+                    <Text style={styles.buttonText}>Sair</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={{ marginTop: "5%", marginBottom: "10%" }}
+                    onPress={handleDeleteUser}
+                >
+                    <Text style={[styles.buttonText, { color: "red", fontSize: 16, textDecorationLine: "underline" }]}>Excluir Conta</Text>
+                </TouchableOpacity>
 
-                </LinearGradient>
-            </View>
-        </ScrollView>
+            </LinearGradient>
+        </View>
     )
 }

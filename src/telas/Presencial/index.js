@@ -109,7 +109,7 @@ export default function Presencial({ navigation }) {
                 <FlatList
                     ref={flatlistRef}
                     data={data}
-                    keyExtractor={(item) => String(item.id)}
+                    keyExtractor={(item) => String(item.uid)}
                     renderItem={({ item }) => (
                         <View style={styles.itemContainer}>
                             <TouchableOpacity style={styles.item} onPress={() => navigation.navigate("Agendar", {
