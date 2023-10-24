@@ -71,6 +71,18 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between",
     },
+    button: {
+        backgroundColor: "#0c6577",
+        borderRadius: 10,
+        padding: "2%",
+        width: "80%",
+        alignItems: "center",
+        marginBottom: "5%",
+    },
+    buttonText: {
+        color: "#fff",
+        fontSize: 16,
+    },
 });
 
 export default styles;

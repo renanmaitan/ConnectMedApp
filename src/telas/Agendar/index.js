@@ -5,49 +5,79 @@ import styles from "./style";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import RatingRead from "../../components/RatingRead";
+import createScheduling from "../../services/createScheduling";
+import auth from "../../Config";
 
 export default function Agendar({ route }) {
     const item = route.params.item
-    return (
-        
-        <View style={styles.container}>
-           <View style={styles.itemContainer}>
-                        <View style={styles.item}>
-                            <LinearGradient
-                                start={{ x: 0, y: 1 }} end={{ x: 1, y: 0 }}
-                                locations={[0, 0.2, 0.8]}
-                                colors={["#68a4b3", "#0c6577", "#11687c"]}
-                                style={styles.itemGradient}
-                            >
-                                <View style={styles.topCard}>
-                                    <View>
-                                        <Text style={styles.itemTitle}>{item.name}</Text>
-                                        <Text style={styles.itemSubTitle}>{item.specialty} | {item.register}</Text>
-                                    </View>
-                                    <RatingRead points={item.points} />
-                                </View>
-                                <View style={styles.bodyCard}>
-                                    <FontAwesome5 name="user-md" size={50} color="#4aacc4" />
-                                    <View style={styles.bodyContainer}>
-                                        <View style={styles.bodyContent}>
-                                            <FontAwesome5 name="whatsapp" size={16} color="#fff" />
-                                            <Text style={styles.itemText}>{item.phone}</Text>
-                                        </View>
-                                        <View style={styles.bodyContent}>
-                                            <FontAwesome5 name="coins" size={16} color="#fff" />
-                                            <Text style={styles.itemText}>{item.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</Text>
-                                        </View>
-                                    </View>
-                                </View>
-                                <Text 
-                                style={styles.itemFooter}
-                                multiline={true}
-                                >{item.address} - {item.bairro} - {item.city} - CEP: {item.cep}</Text>
 
-                            </LinearGradient>
+    const date = new Date()
+    const dateNow = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
+    const timeNow = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
+
+    const data = {
+        doctorUid: item.uid,
+        date: dateNow,
+        time: timeNow,
+        modality: item.modality,
+        specialty: item.specialty,
+        value: item.price,
+        patientUid: auth.currentUser.uid
+    }
+
+    const handleCreateScheduling = () => {
+        createScheduling(data)
+            .then(() => {
+                console.log("Agendamento criado com sucesso!")
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+    }
+
+    return (
+        <View style={styles.container}>
+            <View style={styles.itemContainer}>
+                <View style={styles.item}>
+                    <LinearGradient
+                        start={{ x: 0, y: 1 }} end={{ x: 1, y: 0 }}
+                        locations={[0, 0.2, 0.8]}
+                        colors={["#68a4b3", "#0c6577", "#11687c"]}
+                        style={styles.itemGradient}
+                    >
+                        <View style={styles.topCard}>
+                            <View>
+                                <Text style={styles.itemTitle}>{item.name}</Text>
+                                <Text style={styles.itemSubTitle}>{item.specialty} | {item.register}</Text>
+                            </View>
+                            <RatingRead points={item.points} />
                         </View>
-                    </View>
-            
+                        <View style={styles.bodyCard}>
+                            <FontAwesome5 name="user-md" size={50} color="#4aacc4" />
+                            <View style={styles.bodyContainer}>
+                                <View style={styles.bodyContent}>
+                                    <FontAwesome5 name="whatsapp" size={16} color="#fff" />
+                                    <Text style={styles.itemText}>{item.phone}</Text>
+                                </View>
+                                <View style={styles.bodyContent}>
+                                    <FontAwesome5 name="coins" size={16} color="#fff" />
+                                    <Text style={styles.itemText}>{item.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</Text>
+                                </View>
+                            </View>
+                        </View>
+                        <Text
+                            style={styles.itemFooter}
+                            multiline={true}
+                        >{item.address} - {item.bairro} - {item.city} - CEP: {item.cep}</Text>
+                    </LinearGradient>
+                </View>
+            </View>
+            <TouchableOpacity
+                style={styles.button}
+                onPress={() => handleCreateScheduling()}
+            >
+                <Text style={styles.buttonText}>Agendar</Text>
+            </TouchableOpacity>
         </View>
     )
 }
