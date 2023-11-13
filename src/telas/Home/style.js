@@ -14,17 +14,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         flex: 1,
     },
-    copyright: {
-        position: 'absolute', // Use absolute em vez de fixed
-        bottom: 10,
-        width: '100%',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    copyrightText:{
-        fontFamily: 'sans-serif-light',
-        fontSize: 12,
-    },
     title: {
         fontFamily: 'sans-serif-light',
         fontSize: 30,

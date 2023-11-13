@@ -7,13 +7,14 @@ import { LinearGradient } from "expo-linear-gradient";
 import RatingRead from "../../components/RatingRead";
 import createScheduling from "../../services/createScheduling";
 import auth from "../../Config";
+import { useNavigation } from "@react-navigation/native";
 
 export default function Agendar({ route }) {
     const item = route.params.item
-
     const date = new Date()
     const dateNow = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
     const timeNow = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
+    const navigation = useNavigation()
 
     const data = {
         doctorUid: item.uid,
@@ -29,6 +30,8 @@ export default function Agendar({ route }) {
         createScheduling(data)
             .then(() => {
                 console.log("Agendamento criado com sucesso!")
+                navigation.navigate("HomeTab")
+                alert("Agendamento criado com sucesso!")
             })
             .catch((error) => {
                 console.log(error)

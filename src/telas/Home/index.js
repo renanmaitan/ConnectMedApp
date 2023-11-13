@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 
-import { Text, View, TouchableOpacity } from "react-native";
+import { Text, View, TouchableOpacity, RefreshControl } from "react-native";
 import styles from "./style";
 import ListaHorizontal from "../../components/ListaHorizontal";
 import { LinearGradient } from "expo-linear-gradient";
@@ -87,36 +87,35 @@ export default function Login({ navigation }) {
 
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState([]);
+    const [refreshing, setRefreshing] = useState(false);
 
     const { userDatas } = useContext(UserContext);
 
     useEffect(() => {
         if (Object.keys(userDatas).length > 0) {
             setLoading(false);
-            getScheduling().then((res) =>{
-                const appointments = []
-                const json = JSON.parse(JSON.stringify(res))
-                json.forEach((appointment, index) => {
-                    getUser(userDatas.isDoctor ? appointment.patientUid : appointment.doctorUid).then((res) => {
-                        appointments.push({
-                            name: res.name,
-                            specialty: res.specialty,
-                            day: appointment.date.split("-")[0],
-                            month: appointment.date.split("-")[1],
-                            year: appointment.date.split("-")[2],
-                            hour: appointment.time.split(":")[0],
-                            minute: appointment.time.split(":")[1],
-                            id: index+1,
-                            address: res.address? res.address : "Consulta Online",
-                        })
-                    }).then(() => {
-                        console.log(appointments)
-                        setData(appointments)
-                    })
-                })
-            })
+            getScheduling().then(async (res) => {
+                const appointments = [];
+                const json = JSON.parse(JSON.stringify(res));
+                console.log(json);
+                for (const appointment of json) {
+                    const user = await getUser(userDatas.isDoctor ? appointment.patientUid : appointment.doctorUid);
+                    appointments.push({
+                        name: user.name,
+                        specialty: user.specialty,
+                        day: appointment.date.split("-")[0],
+                        month: appointment.date.split("-")[1],
+                        year: appointment.date.split("-")[2],
+                        hour: appointment.time.split(":")[0],
+                        minute: appointment.time.split(":")[1],
+                        id: appointments.length + 1,
+                        address: user.address ? user.address : "Consulta Online",
+                    });
+                }
+                setData(appointments);
+            });
         }
-    }, [userDatas])
+    }, [userDatas]);
 
     async function getUser(uid) {
         const q = query(collection(db, "users"), where("uid", "==", uid));
@@ -137,15 +136,45 @@ export default function Login({ navigation }) {
         });
         return list
     }
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        getScheduling().then(async (res) => {
+            const appointments = [];
+            const json = JSON.parse(JSON.stringify(res));
+            console.log(json);
+            for (const appointment of json) {
+                const user = await getUser(userDatas.isDoctor ? appointment.patientUid : appointment.doctorUid);
+                appointments.push({
+                    name: user.name,
+                    specialty: user.specialty,
+                    day: appointment.date.split("-")[0],
+                    month: appointment.date.split("-")[1],
+                    year: appointment.date.split("-")[2],
+                    hour: appointment.time.split(":")[0],
+                    minute: appointment.time.split(":")[1],
+                    id: appointments.length + 1,
+                    address: user.address ? user.address : "Consulta Online",
+                });
+            }
+            setData(appointments);
+        });
+        setRefreshing(false);
+    }, []);
 
     if (loading) {
         return <Loading />
     }
 
     return (
-        <ScrollView>
-
-            <View style={styles.container}>
+        <View style={styles.container}>
+            <ScrollView
+                refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                    />
+                }
+            >
                 <LinearGradient
                     colors={['#086972', 'transparent']}
                     style={styles.scrollview}
@@ -164,17 +193,17 @@ export default function Login({ navigation }) {
                         </View>
                     </View>
                     <View style={styles.buttons}>
-                        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Médicos')}>
-                            {userDatas.isDoctor ? <Text style={styles.textButton}>Minha agenda</Text> :
+                        {userDatas.isDoctor ? <TouchableOpacity style={styles.button} onPress={() => alert("Tela indisponivel no momento")/*navigation.navigate('MinhaAgenda')*/}><Text style={styles.textButton}>Minha agenda</Text></TouchableOpacity>:
+                            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Médicos')}>
                                 <Text style={styles.textButton}>Agendar Consulta</Text>
+                            </TouchableOpacity>
                             }
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.buttonRed}>
-                            <Text style={styles.textButton}>Cancelar Agendamento</Text>
-                        </TouchableOpacity>
-                    </View>
+                            <TouchableOpacity style={styles.buttonRed}>
+                                <Text style={styles.textButton}>Cancelar Agendamento</Text>
+                            </TouchableOpacity>
+                        </View>
                 </LinearGradient>
-            </View>
-        </ScrollView>
+            </ScrollView>
+        </View>
     );
 }

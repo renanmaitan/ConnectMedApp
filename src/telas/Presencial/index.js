@@ -14,7 +14,7 @@ export default function Presencial({ navigation }) {
     const [data, setData] = useState(null)
 
     const getDoctorsSpecialty = async (specialty) => {
-        const q = query(collection(db, "users"), where("specialty", "==", specialty));
+        const q = query(collection(db, "users"), where("specialty", "==", specialty), where("modality", "in", ["Presencial", "Presencial e Online"]));
         const querySnapshot = await getDocs(q);
         let list = []
         querySnapshot.forEach((doc) => {
@@ -24,7 +24,7 @@ export default function Presencial({ navigation }) {
     }
 
     const getDoctors = async () => {
-        const q = query(collection(db, "users"), where("isDoctor", "==", true));
+        const q = query(collection(db, "users"), where("modality", "in", ["Presencial", "Presencial e Online"]));
         const querySnapshot = await getDocs(q);
         let list = []
         querySnapshot.forEach((doc) => {
@@ -157,7 +157,7 @@ export default function Presencial({ navigation }) {
             ) : (
                 <View style={styles.emptyContainer}>
                     <Text style={styles.emptyText}
-                    >Não há médicos disponíveis para a especialidade selecionada</Text>
+                    >Não há médicos disponíveis para a especialidade selecionada na modalidade presencial</Text>
                 </View>
             )}
         </View>

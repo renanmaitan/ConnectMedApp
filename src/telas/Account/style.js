@@ -2,9 +2,10 @@ import { StyleSheet } from "react-native";
 
 export default styles = StyleSheet.create({
     container: {
+        width: '100%',
+        alignItems: 'center',
+        backgroundColor: '#DFEDEB',
         flex: 1,
-        backgroundColor: "#086972",
-        alignItems: "center",
     },
     scrollview: {
         backgroundColor: '#DFEDEB',
