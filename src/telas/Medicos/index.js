@@ -14,7 +14,7 @@ export default function Medicos({navigation}) {
                 <Text style={styles.title}>Agendamento de consulta</Text>
                 <TouchableOpacity 
                 style={styles.local}
-                onPress={() => navigation.navigate('Presencial')}
+                onPress={() => navigation.navigate('Presencial', {filter: 'Presencial'})}
                 >
                     <LinearGradient 
                     start={{x: 0.0, y: 1}} end={{x: 1.2, y: 1.0}}
@@ -23,7 +23,7 @@ export default function Medicos({navigation}) {
                         <Text style={styles.optionText}>Marcar consulta presencial</Text>
                     </LinearGradient>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.online}>
+                <TouchableOpacity style={styles.online} onPress={() => navigation.navigate('Presencial', {filter: 'Online'})}>
                     <LinearGradient 
                     colors={['green', 'transparent']} 
                     style={styles.gradient}

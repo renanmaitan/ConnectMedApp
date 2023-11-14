@@ -97,7 +97,6 @@ export default function Login({ navigation }) {
             getScheduling().then(async (res) => {
                 const appointments = [];
                 const json = JSON.parse(JSON.stringify(res));
-                console.log(json);
                 for (const appointment of json) {
                     const user = await getUser(userDatas.isDoctor ? appointment.patientUid : appointment.doctorUid);
                     appointments.push({
@@ -141,7 +140,10 @@ export default function Login({ navigation }) {
         getScheduling().then(async (res) => {
             const appointments = [];
             const json = JSON.parse(JSON.stringify(res));
-            console.log(json);
+            if (json.length == 0) {
+                setRefreshing(false);
+                return;
+            }
             for (const appointment of json) {
                 const user = await getUser(userDatas.isDoctor ? appointment.patientUid : appointment.doctorUid);
                 appointments.push({

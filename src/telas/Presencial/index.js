@@ -9,12 +9,14 @@ import RatingRead from "../../components/RatingRead";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "../../Config";
 
-export default function Presencial({ navigation }) {
+export default function Presencial({ navigation, route }) {
+
+    const filter = route.params.filter
 
     const [data, setData] = useState(null)
 
     const getDoctorsSpecialty = async (specialty) => {
-        const q = query(collection(db, "users"), where("specialty", "==", specialty), where("modality", "in", ["Presencial", "Presencial e Online"]));
+        const q = query(collection(db, "users"), where("specialty", "==", specialty), where("modality", "in", [filter, "Presencial e Online"]));
         const querySnapshot = await getDocs(q);
         let list = []
         querySnapshot.forEach((doc) => {
@@ -24,7 +26,7 @@ export default function Presencial({ navigation }) {
     }
 
     const getDoctors = async () => {
-        const q = query(collection(db, "users"), where("modality", "in", ["Presencial", "Presencial e Online"]));
+        const q = query(collection(db, "users"), where("modality", "in", [filter, "Presencial e Online"]));
         const querySnapshot = await getDocs(q);
         let list = []
         querySnapshot.forEach((doc) => {
@@ -51,6 +53,16 @@ export default function Presencial({ navigation }) {
         getSpecialty().then((res) => {
             setSpecialities(res)
         })
+        if (filter == "Presencial") {
+            navigation.setOptions({
+                title: "Presencial",
+            })
+        }
+        else {
+            navigation.setOptions({
+                title: "Online",
+            })
+        }
     }, [])
 
     const endereco = {
@@ -113,7 +125,8 @@ export default function Presencial({ navigation }) {
                     renderItem={({ item }) => (
                         <View style={styles.itemContainer}>
                             <TouchableOpacity style={styles.item} onPress={() => navigation.navigate("Agendar", {
-                                item: item
+                                item: item,
+                                filter: filter,
                             })}>
                                 <LinearGradient
                                     start={{ x: 0, y: 1 }} end={{ x: 1, y: 0 }}
@@ -139,10 +152,10 @@ export default function Presencial({ navigation }) {
                                                 <FontAwesome5 name="coins" size={16} color="#fff" />
                                                 <Text style={styles.itemText}>{item.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</Text>
                                             </View>
-                                            <View style={styles.bodyContent}>
+                                            {filter == "Presencial" && <View style={styles.bodyContent}>
                                                 <FontAwesome5 name="map-marker-alt" size={16} color="#fff" />
                                                 <Text style={styles.itemText} numberOfLines={1}>{item.address}</Text>
-                                            </View>
+                                            </View>}
                                         </View>
                                     </View>
                                     <Text style={styles.itemFooter}>Clique nesse cartão para agendar e/ou ver mais detalhes</Text>

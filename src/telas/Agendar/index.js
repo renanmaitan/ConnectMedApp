@@ -11,6 +11,7 @@ import { useNavigation } from "@react-navigation/native";
 
 export default function Agendar({ route }) {
     const item = route.params.item
+    const filter = route.params.filter
     const date = new Date()
     const dateNow = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
     const timeNow = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
@@ -71,7 +72,7 @@ export default function Agendar({ route }) {
                         <Text
                             style={styles.itemFooter}
                             multiline={true}
-                        >{item.address} - {item.bairro} - {item.city} - CEP: {item.cep}</Text>
+                        >{filter == "Presencial"? `${item.address} - ${item.bairro} - ${item.city} - CEP: ${item.cep}` : "Atendimento Online" }</Text>
                     </LinearGradient>
                 </View>
             </View>
@@ -84,14 +85,3 @@ export default function Agendar({ route }) {
         </View>
     )
 }
-
-// itemId: item.id,
-// itemName: item.name,
-// itemSpecialty: item.specialty,
-// itemCrm: item.crm,
-// itemPrice: item.price,
-// itemAddress: item.address,
-// itemCity: item.city,
-// itemCep: item.cep,
-// itemBairro: item.bairro,
-// itemPhone: item.phone,
