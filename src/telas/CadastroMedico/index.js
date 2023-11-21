@@ -27,7 +27,9 @@ export default function App(routes) {
         address: "",
         bairro: "",
         city: "",
-        cep: ""
+        cep: "",
+        startHour: undefined,
+        endHour: undefined
     })
     const modalities = [
         {
@@ -67,6 +69,8 @@ export default function App(routes) {
                 cep: doctorForm.cep,
                 points: 5,
                 price: doctorForm.value,
+                startHour: doctorForm.startHour,
+                endHour: doctorForm.endHour
             });
 
         } catch (error) {
@@ -245,6 +249,33 @@ export default function App(routes) {
                     value={doctorForm.register}
                     keyboardType="numeric"
                 /> : null)))))}
+                <Text style={[styles.text, { marginBottom: "2%", marginTop: "2%" }]}>Selecione o seu horário de atendimento: </Text>
+                <View style={{ width: "100%", alignItems: "center" }}>
+                    <TextInput
+                        placeholder="Digite o seu horário de início. Ex: 7"
+                        style={styles.input}
+                        onChangeText={(text) => {
+                            setDoctorForm({
+                                ...doctorForm,
+                                startHour: text
+                            })
+                        }}
+                        value={doctorForm.startHour}
+                        keyboardType="numeric"
+                    />
+                    <TextInput
+                        placeholder="Digite o seu horário de término. Ex: 18"
+                        style={styles.input}
+                        onChangeText={(text) => {
+                            setDoctorForm({
+                                ...doctorForm,
+                                endHour: text
+                            })
+                        }}
+                        value={doctorForm.endHour}
+                        keyboardType="numeric"
+                    />
+                </View>
                 <TouchableOpacity style={styles.button} onPress={() => { handleCreateUser() }}>
                     <Text style={{ color: "white", fontSize: 16 }}>Cadastrar</Text>
                 </TouchableOpacity>

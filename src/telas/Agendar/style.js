@@ -78,11 +78,16 @@ const styles = StyleSheet.create({
         padding: "2%",
         width: "80%",
         alignItems: "center",
-        marginBottom: "5%",
+        marginTop: "5%",
     },
     buttonText: {
         color: "#fff",
         fontSize: 16,
+    },
+    selectContainer: {
+        alignItems: "center",
+        width: "95%",
+        marginVertical: "2%",
     },
 });
 

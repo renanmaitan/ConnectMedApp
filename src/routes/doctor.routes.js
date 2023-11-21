@@ -62,7 +62,6 @@ function Tabs() {
 
 
 export default function AppDoctor() {
-  console.log("App - tela de médico")
   return (
     <Stack.Navigator initialRouteName="Home" screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Home" component={Tabs} />
