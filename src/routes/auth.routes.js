@@ -5,6 +5,7 @@ import { StyleSheet } from "react-native"
 import Login from "../telas/Login"
 import Cadastro from "../telas/Cadastro"
 import CadastroMedico from "../telas/CadastroMedico"
+import RecoverPassword from "../telas/RecoverPassword";
 
 const AuthStack = createStackNavigator()
 const RegisterStack = createStackNavigator()
@@ -30,6 +31,15 @@ export default function AuthRoutes() {
                     title: 'Cadastro',
                 }}
                 name="CadastroRoutes" component={RegisterRoutes}
+            />
+            <AuthStack.Screen
+                options={{
+                    headerShown: true,
+                    headerStyle: styles.header,
+                    headerTintColor: '#FFF',
+                    title: 'Recuperar senha',
+                }}
+                name="RecoverPassword" component={RecoverPassword}
             />
         </AuthStack.Navigator>
     )

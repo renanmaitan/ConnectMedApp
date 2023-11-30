@@ -45,7 +45,7 @@ export default function Login({ navigation }) {
             </View>
             <View style={styles.boxInput}>
                 <TextInput
-                    placeholder='CPF ou E-mail'
+                    placeholder='E-mail'
                     onChangeText={(text) => setUser(text.replace(' ', ''))}
                     value={user}
                     style={styles.input}
@@ -63,7 +63,7 @@ export default function Login({ navigation }) {
             </View>
             <View style={styles.boxMessage}>
                 <Text
-                    onPress={() => navigation.navigate('Home')}
+                    onPress={() => navigation.navigate('RecoverPassword')}
                     style={styles.message}
                 >Esqueci minha senha</Text>
             </View>
