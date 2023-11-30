@@ -11,50 +11,47 @@ import { getDocs, query, collection, where } from "firebase/firestore";
 import { db } from "../../Config";
 
 export default function Login({ navigation }) {
-    const dataHistory = [
-        {
-            id: 1,
-            name: "Doutor Fran",
-            specialty: "Cardiologisto",
-            day: "25",
-            month: "10",
-            year: "2022",
-            hour: "14",
-            minute: "00",
-            address: "Rua dos Bobos, 0",
-            present: true,
-        },
-        {
-            id: 2,
-            name: "Doutura Fran",
-            specialty: "Cardiologista",
-            day: "24",
-            month: "9",
-            year: "2022",
-            hour: "15",
-            minute: "10",
-            address: "Rua dos Bobos, 1",
-            present: false,
-        },
-        {
-            id: 3,
-            name: "Doutore Fran",
-            specialty: "Cardiologiste",
-            day: "23",
-            month: "8",
-            year: "2023",
-            hour: "16",
-            minute: "20",
-            address: "Rua dos Bobos, 2",
-            present: true,
-        },
-    ]
-
+    
     const [loading, setLoading] = useState(true);
-    const [data, setData] = useState([]);
     const [refreshing, setRefreshing] = useState(false);
+    const [dataNormal, setDataNormal] = useState([]);
+    const [dataHistory, setDataHistory] = useState([]);
 
     const { userDatas } = useContext(UserContext);
+
+    const disjoinData = (data) => {
+        const date = new Date();
+        const newData = [];
+        const newData2 = [];
+        for (let i = 0; i < data.length; i++) {
+            if (data[i].year > date.getFullYear()) {
+                newData.push(data[i]);
+            } else if (data[i].year == date.getFullYear()) {
+                if (data[i].month > date.getMonth() + 1) {
+                    newData.push(data[i]);
+                } else if (data[i].month == date.getMonth() + 1) {
+                    if (data[i].day > date.getDate()) {
+                        newData.push(data[i]);
+                    } else if (data[i].day == date.getDate()) {
+                        if (data[i].hour > date.getHours()) {
+                            newData.push(data[i]);
+                        } else if (data[i].hour == date.getHours()) {
+                            if (data[i].minute > date.getMinutes()) {
+                                newData.push(data[i]);
+                            } else {
+                                newData2.push(data[i]);
+                            }
+                        } else {
+                            newData2.push(data[i]);
+                        }
+                    } else {
+                        newData2.push(data[i]);
+                    }
+                }
+            }
+        }
+        return [newData, newData2];
+    };
 
     const orderData = (data) => {
         const newData = data.sort((a, b) => {
@@ -116,7 +113,9 @@ export default function Login({ navigation }) {
                         address: user.address ? user.address : "Consulta Online",
                     });
                 }
-                setData(orderData(appointments));
+                const [newData, newData2] = disjoinData(appointments);
+                setDataNormal(orderData(newData));
+                setDataHistory(orderData(newData2));
             });
         }
     }, [userDatas]);
@@ -163,7 +162,9 @@ export default function Login({ navigation }) {
                     address: user.address ? user.address : "Consulta Online",
                 });
             }
-            setData(orderData(appointments));
+            const [newData, newData2] = disjoinData(appointments);
+            setDataNormal(orderData(newData));
+            setDataHistory(orderData(newData2));
         });
         setRefreshing(false);
     }, []);
@@ -190,7 +191,7 @@ export default function Login({ navigation }) {
                     <View style={styles.carousel}>
                         <Text style={styles.carouselTitle}>Seus agendamentos:</Text>
                         <View style={styles.carouselBody}>
-                            <ListaHorizontal data={data} />
+                            <ListaHorizontal data={dataNormal} />
                         </View>
                     </View>
                     <View style={styles.carousel}>
