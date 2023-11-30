@@ -26,7 +26,7 @@ export default function Login({ navigation }) {
             try {
                 if (Object.keys(userDatas).length > 0) {
                     setLoading(false);
-                    const res = await getScheduling(userDatas);
+                    const res = await getScheduling(userDatas.isDoctor ? "doctorUid" : "patientUid", userDatas);
                     const appointments = [];
                     const json = JSON.parse(JSON.stringify(res));
                     for (const appointment of json) {
@@ -58,7 +58,7 @@ export default function Login({ navigation }) {
 
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
-        getScheduling(userDatas).then(async (res) => {
+        getScheduling(userDatas.isDoctor ? "doctorUid" : "patientUid", userDatas).then(async (res) => {
             const appointments = [];
             const json = JSON.parse(JSON.stringify(res));
             if (json.length == 0) {

@@ -88,17 +88,16 @@ export default function Presencial({ navigation, route }) {
     }
 
     async function catchList(filtro) {
-        let vazio = false
-        if (filtro == "todos") {
-            setData(shuffle(await getDoctors()))
+        let newData;
+        if (filtro === "todos") {
+            newData = shuffle(await getDoctors());
+        } else {
+            newData = await getDoctorsSpecialty(filtro);
         }
-        else {
-            setData(await getDoctorsSpecialty(filtro))
-        }
-        data == null ? vazio = true : vazio = false
-        if (vazio == false) {
+        setData(newData);
+        if (newData && newData.length > 0) {
             if (flatlistRef.current) {
-                flatlistRef.current.scrollToIndex({ animated: true, index: 0 })
+                flatlistRef.current.scrollToIndex({ animated: true, index: 0 });
             }
         }
     }

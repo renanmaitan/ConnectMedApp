@@ -91,9 +91,9 @@ export async function getUser(uid) {
     }
 }
 
-export async function getScheduling(userDatas) {
+export async function getScheduling(mode, userDatas) {
     try {
-        const q = query(collection(db, "scheduling"), where("patientUid", "==", userDatas.uid));
+        const q = query(collection(db, "scheduling"), where(mode, "==", userDatas.uid));
         const querySnapshot = await getDocs(q);
         const list = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
         return list;
