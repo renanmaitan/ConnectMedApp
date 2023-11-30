@@ -6,6 +6,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { deleteUser } from 'firebase/auth';
 import UserContext from '../../contexts/userData';
 import Loading from '../../components/Loading';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import styles from "./style";
 
@@ -13,7 +14,7 @@ export default function Account({ navigation }) {
 
     const user = auth.currentUser;
     const [loading, setLoading] = useState(true);
-    const { userDatas } = useContext(UserContext)
+    const { userDatas, setUserDatas } = useContext(UserContext)
     const { delUser } = useContext(UserContext)
 
     useEffect(() => {
@@ -26,12 +27,15 @@ export default function Account({ navigation }) {
         return <Loading />
     }
 
-    const handleLogout = () => {
-        auth.signOut()
-            .catch((error) => {
-                console.log(error)
-            });
-    }
+    const handleLogout = async () => {
+        try {
+            await AsyncStorage.clear();
+            await auth.signOut();
+            setUserDatas({});
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     const handleDeleteUser = async () => {
         await delUser()

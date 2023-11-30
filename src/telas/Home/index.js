@@ -22,10 +22,12 @@ export default function Login({ navigation }) {
     const [selected, setSelected] = useState(null);
 
     useEffect(() => {
+        if (userDatas.uid == null || userDatas.uid == undefined) {
+            return;
+        }
         const fetchData = async () => {
             try {
                 if (Object.keys(userDatas).length > 0) {
-                    setLoading(false);
                     const res = await getScheduling(userDatas.isDoctor ? "doctorUid" : "patientUid", userDatas);
                     const appointments = [];
                     const json = JSON.parse(JSON.stringify(res));
@@ -47,17 +49,21 @@ export default function Login({ navigation }) {
                     const [newData, newData2] = disjoinData(appointments);
                     setDataNormal(orderData(newData));
                     setDataHistory(orderData(newData2));
+                    setLoading(false);
                 }
             } catch (error) {
                 console.error("Erro ao buscar dados:", error);
             }
         };
-
         fetchData();
-    }, [userDatas]);
+    }, [userDatas, refreshing]);
 
-    const onRefresh = React.useCallback(() => {
+    const onRefresh = () => {    
         setRefreshing(true);
+        if (userDatas.uid == null || userDatas.uid == undefined) {
+            setRefreshing(false);
+            return;
+        }
         getScheduling(userDatas.isDoctor ? "doctorUid" : "patientUid", userDatas).then(async (res) => {
             const appointments = [];
             const json = JSON.parse(JSON.stringify(res));
@@ -85,7 +91,8 @@ export default function Login({ navigation }) {
             setDataHistory(orderData(newData2));
         });
         setRefreshing(false);
-    }, []);
+    }
+
 
     if (loading) {
         return <Loading />

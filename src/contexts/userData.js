@@ -44,7 +44,7 @@ export function UserProvider({ children }) {
     }
 
     return (
-        <UserContext.Provider value={{ userDatas, delUser }}>
+        <UserContext.Provider value={{ userDatas, delUser, setUserDatas }}>
             {children}
         </UserContext.Provider>
     )
