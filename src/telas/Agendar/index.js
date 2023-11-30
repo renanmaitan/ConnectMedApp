@@ -12,6 +12,7 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../Config";
 import Select from "../../components/Select";
 import Loading from "../../components/Loading";
+import { getFreeHours, getFreeDays, getFreeMonths, getFreeYears } from "./utils";
 
 export default function Agendar({ route }) {
     const item = route.params.item
@@ -21,13 +22,19 @@ export default function Agendar({ route }) {
     const endHour = parseInt(item.endHour)
     const dateNow = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
     const [time, setTime] = useState({ id: null, label: "Selecione um horário" })
+    const [month, setMonth] = useState({ id: null, label: "Selecione um mês" })
+    const [year, setYear] = useState({ id: null, label: "Selecione um ano" })
+    const [day, setDay] = useState({ id: null, label: "Selecione um dia" })
     const navigation = useNavigation()
     const [freeHours, setFreeHours] = useState([])
+    const [freeDays, setFreeDays] = useState([])
+    const [freeMonths, setFreeMonths] = useState([])
+    const [freeYears, setFreeYears] = useState([])
     const [loading, setLoading] = useState(false)
 
     const data = {
         doctorUid: item.uid,
-        date: dateNow,
+        date: `${day.label}-${month.label}-${year.label}`,
         time: time.label,
         modality: item.modality,
         specialty: item.specialty,
@@ -35,59 +42,63 @@ export default function Agendar({ route }) {
         patientUid: auth.currentUser.uid
     }
 
-    async function getFreeHours() {
-        const schedules = await getSchedules()
-        const localFreeHours = []
-        const busyHours = []
-        const pastHours = []
-        const notPastHours = []
-        const notAvailableHours = []
-        for (let i = startHour; i < endHour; i++) {
-            const hour00 = `${i}:00`
-            const hour30 = `${i}:30`
-            if (i <= date.getHours()) {
-                pastHours.push(hour00, hour30)
-                if (i === date.getHours() && date.getMinutes() >= 30) {
-                    pastHours.push(`${i + 1}:00`)
-                    notPastHours.push(`${i + 1}:30`)
-                    i++
-                }
-            } else {
-                notPastHours.push(hour00, hour30)
-            }
-        }
-        schedules.forEach((schedule) => {
-            let day = schedule.date.split("-")[0]
-            let month = schedule.date.split("-")[1]
-            let year = schedule.date.split("-")[2]
-            let hour = schedule.time.split(":")[0]
-            let minute = schedule.time.split(":")[1]
-            if (day == date.getDate() && month == date.getMonth() + 1 && year == date.getFullYear()) {
-                busyHours.push(`${hour}:${minute}`)
-            }
-        })
-        notPastHours.forEach((hour, i) => {
-            if (!busyHours.includes(hour)) {
-                localFreeHours.push({ id: i, label: hour })
-            } else {
-                notAvailableHours.push(hour)
-            }
-        })
-        return localFreeHours
-    }
-
-    useEffect(() => {
-        getFreeHours()
+    const handleGetFreeHours = async (dia, mes, ano) => {
+        getFreeHours(dia, mes, ano, startHour, endHour, getSchedules)
             .then((localFreeHours) => {
                 if (localFreeHours.length === 0) {
-                    localFreeHours.push({ id: null, label: "Não há horários disponíveis para hoje" })
+                    localFreeHours.push({ id: null, label: "Não há horários disponíveis para esse dia" })
                 }
                 setFreeHours(localFreeHours)
             })
             .catch((error) => {
                 console.log(error)
             })
+    }
 
+    const handleGetFreeDays = (mes, ano) => {
+        const freeDays = getFreeDays(mes, ano);
+        const localFreeDays = [];
+        if (freeDays.length === 0) {
+            localFreeDays.push({ id: null, label: "Não há dias disponíveis para este mês" })
+            setFreeDays(localFreeDays);
+            return;
+        }
+        freeDays.forEach((day, i) => {
+            localFreeDays.push({ id: i, label: day });
+        });
+        setFreeDays(localFreeDays);
+    }
+
+    const handleGetFreeMonths = (ano) => {
+        const freeMonths = getFreeMonths(ano);
+        const localFreeMonths = [];
+        if (freeMonths.length === 0) {
+            localFreeMonths.push({ id: null, label: "Não há meses disponíveis para este ano" })
+            setFreeMonths(localFreeMonths);
+            return;
+        }
+        freeMonths.forEach((month, i) => {
+            localFreeMonths.push({ id: i, label: month });
+        });
+        setFreeMonths(localFreeMonths);
+    }
+
+    const handleGetFreeYears = () => {
+        const freeYears = getFreeYears();
+        const localFreeYears = [];
+        if (freeYears.length === 0) {
+            localFreeYears.push({ id: null, label: "Não há anos disponíveis" })
+            setFreeYears(localFreeYears);
+            return;
+        }
+        freeYears.forEach((year, i) => {
+            localFreeYears.push({ id: i, label: year });
+        });
+        setFreeYears(localFreeYears);
+    }
+
+    useEffect(() => {
+        handleGetFreeYears()
     }, [])
 
     async function getSchedules() {
@@ -104,9 +115,10 @@ export default function Agendar({ route }) {
     const handleCreateScheduling = () => {
         if (time.label == "Não há horários disponíveis para hoje") {
             return alert("Não há horários disponíveis para hoje")
-        }else if (time.id == null) {
+        } else if (time.id == null) {
             return alert("Selecione um horário")
         }
+        setLoading(true)
         createScheduling(data)
             .then(() => {
                 navigation.navigate("HomeTab")
@@ -171,6 +183,45 @@ export default function Agendar({ route }) {
             </View>
             <View style={styles.selectContainer}>
                 <Select
+                    options={freeYears}
+                    text={year.label}
+                    onChangeSelect={(value) => {
+                        setLoading(true)
+                        const selected = freeYears.find((item) => item.id == value)
+                        setYear(selected)
+                        handleGetFreeMonths(selected.label)
+                        setLoading(false)
+                    }}
+                />
+            </View>
+            {year.id!=null && <View style={styles.selectContainer}>
+                <Select
+                    options={freeMonths}
+                    text={month.label}
+                    onChangeSelect={(value) => {
+                        setLoading(true)
+                        const selected = freeMonths.find((item) => item.id == value)
+                        setMonth(selected)
+                        handleGetFreeDays(selected.label, year.label)
+                        setLoading(false)
+                    }}
+                />
+            </View>}
+            {month.id!=null && <View style={styles.selectContainer}>
+                <Select
+                    options={freeDays}
+                    text={day.label}
+                    onChangeSelect={(value) => {
+                        setLoading(true)
+                        const selected = freeDays.find((item) => item.id == value)
+                        setDay(selected)
+                        handleGetFreeHours(selected.label, month.label, year.label)
+                        setLoading(false)
+                    }}
+                />
+            </View>}
+            {day.id!=null && <View style={styles.selectContainer}>
+                <Select
                     options={freeHours}
                     text={time.label}
                     onChangeSelect={(value) => {
@@ -179,7 +230,7 @@ export default function Agendar({ route }) {
                         setTime(selected)
                     }}
                 />
-            </View>
+            </View>}
             <TouchableOpacity
                 style={styles.button}
                 onPress={() => handleCreateScheduling()}
