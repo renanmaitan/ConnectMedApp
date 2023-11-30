@@ -49,47 +49,52 @@ export default function Login({ navigation }) {
             present: true,
         },
     ]
-    // const data = [
-    //     {
-    //         id: 1,
-    //         name: "Doutor Fran",
-    //         specialty: "Cardiologisto",
-    //         day: "25",
-    //         month: "10",
-    //         year: "2023",
-    //         hour: "14",
-    //         minute: "00",
-    //         address: "Rua dos Bobos, 0",
-    //     },
-    //     {
-    //         id: 2,
-    //         name: "Doutura Fran",
-    //         specialty: "Cardiologista",
-    //         day: "24",
-    //         month: "9",
-    //         year: "2024",
-    //         hour: "15",
-    //         minute: "10",
-    //         address: "Rua dos Bobos, 1",
-    //     },
-    //     {
-    //         id: 3,
-    //         name: "Doutore Fran",
-    //         specialty: "Cardiologiste",
-    //         day: "23",
-    //         month: "8",
-    //         year: "2025",
-    //         hour: "16",
-    //         minute: "20",
-    //         address: "Rua dos Bobos, 2",
-    //     },
-    // ];
 
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState([]);
     const [refreshing, setRefreshing] = useState(false);
 
     const { userDatas } = useContext(UserContext);
+
+    const orderData = (data) => {
+        const newData = data.sort((a, b) => {
+            if (a.year > b.year) {
+                return 1;
+            } else if (a.year < b.year) {
+                return -1;
+            } else {
+                if (a.month > b.month) {
+                    return 1;
+                } else if (a.month < b.month) {
+                    return -1;
+                } else {
+                    if (a.day > b.day) {
+                        return 1;
+                    } else if (a.day < b.day) {
+                        return -1;
+                    } else {
+                        if (a.hour > b.hour) {
+                            return 1;
+                        } else if (a.hour < b.hour) {
+                            return -1;
+                        } else {
+                            if (a.minute > b.minute) {
+                                return 1;
+                            } else if (a.minute < b.minute) {
+                                return -1;
+                            } else {
+                                return 0;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        for (let i = 0; i < newData.length; i++) {
+            newData[i].id = i + 1;
+        }
+        return newData;
+    };
 
     useEffect(() => {
         if (Object.keys(userDatas).length > 0) {
@@ -111,7 +116,7 @@ export default function Login({ navigation }) {
                         address: user.address ? user.address : "Consulta Online",
                     });
                 }
-                setData(appointments);
+                setData(orderData(appointments));
             });
         }
     }, [userDatas]);
@@ -158,7 +163,7 @@ export default function Login({ navigation }) {
                     address: user.address ? user.address : "Consulta Online",
                 });
             }
-            setData(appointments);
+            setData(orderData(appointments));
         });
         setRefreshing(false);
     }, []);
