@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
         color: '#FFF',
         marginTop: "10%",
         textShadowColor: 'rgba(0, 0, 0, 0.75)',
-        textShadowOffset: {width: -1, height: 1},
+        textShadowOffset: { width: -1, height: 1 },
         textShadowRadius: 2,
     },
     carousel: {
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
         marginBottom: "2%",
         color: '#FFF',
         textShadowColor: 'rgba(0, 0, 0, 0.75)',
-        textShadowOffset: {width: -1, height: 1},
+        textShadowOffset: { width: -1, height: 1 },
         textShadowRadius: 1,
     },
     carouselBody: {
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
         width: '60%',
         alignItems: 'center',
     },
-    buttons:{
+    buttons: {
         width: '100%',
         marginTop: "4%",
         alignItems: 'center',
@@ -72,6 +72,50 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#FFF',
         textAlign: 'center',
+    },
+    centeredView: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    },
+    modalView: {
+        margin: 20,
+        backgroundColor: "#086972",
+        borderRadius: 20,
+        padding: "5%",
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+    },
+    modalText: {
+        fontFamily: 'sans-serif-light',
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#FFF',
+        textAlign: 'center',
+        marginBottom: "5%",
+    },
+    textStyle: {
+        fontFamily: 'sans-serif-light',
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#FFF',
+        textAlign: 'center',
+    },
+    modalButton: {
+        backgroundColor: 'rgba(150, 0, 0, 1)',
+        borderRadius: 10,
+        padding: "3%",
+        marginTop: "4%",
+        alignItems: 'center',
+    },
+    backModal: {
+        marginTop: "4%",
+        alignItems: 'center',
     },
 });
 

@@ -1,147 +1,64 @@
 import React, { useEffect, useState, useContext } from "react";
 
-import { Text, View, TouchableOpacity, RefreshControl } from "react-native";
+import { Text, View, TouchableOpacity, RefreshControl, SafeAreaView } from "react-native";
 import styles from "./style";
 import ListaHorizontal from "../../components/ListaHorizontal";
 import { LinearGradient } from "expo-linear-gradient";
 import UserContext from "../../contexts/userData";
 import Loading from "../../components/Loading";
 import { ScrollView } from "react-native";
-import { getDocs, query, collection, where } from "firebase/firestore";
-import { db } from "../../Config";
+import { disjoinData, orderData, getScheduling, getUser, handleToSelectData, deleteScheduling } from "./utils";
+import { Modal } from "react-native";
+import Select from "../../components/Select";
 
 export default function Login({ navigation }) {
-    
+
     const [loading, setLoading] = useState(true);
     const [refreshing, setRefreshing] = useState(false);
     const [dataNormal, setDataNormal] = useState([]);
     const [dataHistory, setDataHistory] = useState([]);
-
     const { userDatas } = useContext(UserContext);
-
-    const disjoinData = (data) => {
-        const date = new Date();
-        const newData = [];
-        const newData2 = [];
-        for (let i = 0; i < data.length; i++) {
-            if (data[i].year > date.getFullYear()) {
-                newData.push(data[i]);
-            } else if (data[i].year == date.getFullYear()) {
-                if (data[i].month > date.getMonth() + 1) {
-                    newData.push(data[i]);
-                } else if (data[i].month == date.getMonth() + 1) {
-                    if (data[i].day > date.getDate()) {
-                        newData.push(data[i]);
-                    } else if (data[i].day == date.getDate()) {
-                        if (data[i].hour > date.getHours()) {
-                            newData.push(data[i]);
-                        } else if (data[i].hour == date.getHours()) {
-                            if (data[i].minute > date.getMinutes()) {
-                                newData.push(data[i]);
-                            } else {
-                                newData2.push(data[i]);
-                            }
-                        } else {
-                            newData2.push(data[i]);
-                        }
-                    } else {
-                        newData2.push(data[i]);
-                    }
-                }
-            }
-        }
-        return [newData, newData2];
-    };
-
-    const orderData = (data) => {
-        const newData = data.sort((a, b) => {
-            if (a.year > b.year) {
-                return 1;
-            } else if (a.year < b.year) {
-                return -1;
-            } else {
-                if (a.month > b.month) {
-                    return 1;
-                } else if (a.month < b.month) {
-                    return -1;
-                } else {
-                    if (a.day > b.day) {
-                        return 1;
-                    } else if (a.day < b.day) {
-                        return -1;
-                    } else {
-                        if (a.hour > b.hour) {
-                            return 1;
-                        } else if (a.hour < b.hour) {
-                            return -1;
-                        } else {
-                            if (a.minute > b.minute) {
-                                return 1;
-                            } else if (a.minute < b.minute) {
-                                return -1;
-                            } else {
-                                return 0;
-                            }
-                        }
-                    }
-                }
-            }
-        });
-        for (let i = 0; i < newData.length; i++) {
-            newData[i].id = i + 1;
-        }
-        return newData;
-    };
+    const [modalVisible, setModalVisible] = useState(false);
+    const [selected, setSelected] = useState(null);
 
     useEffect(() => {
-        if (Object.keys(userDatas).length > 0) {
-            setLoading(false);
-            getScheduling().then(async (res) => {
-                const appointments = [];
-                const json = JSON.parse(JSON.stringify(res));
-                for (const appointment of json) {
-                    const user = await getUser(userDatas.isDoctor ? appointment.patientUid : appointment.doctorUid);
-                    appointments.push({
-                        name: user.name,
-                        specialty: user.specialty,
-                        day: appointment.date.split("-")[0],
-                        month: appointment.date.split("-")[1],
-                        year: appointment.date.split("-")[2],
-                        hour: appointment.time.split(":")[0],
-                        minute: appointment.time.split(":")[1],
-                        id: appointments.length + 1,
-                        address: user.address ? user.address : "Consulta Online",
-                    });
+        const fetchData = async () => {
+            try {
+                if (Object.keys(userDatas).length > 0) {
+                    setLoading(false);
+                    const res = await getScheduling(userDatas);
+                    const appointments = [];
+                    const json = JSON.parse(JSON.stringify(res));
+                    for (const appointment of json) {
+                        const user = await getUser(userDatas.isDoctor ? appointment.patientUid : appointment.doctorUid);
+                        appointments.push({
+                            name: user.name,
+                            specialty: user.specialty,
+                            day: appointment.date.split("-")[0],
+                            month: appointment.date.split("-")[1],
+                            year: appointment.date.split("-")[2],
+                            hour: appointment.time.split(":")[0],
+                            minute: appointment.time.split(":")[1],
+                            docId: appointment.id,
+                            address: user.address ? user.address : "Consulta Online",
+                            id: null,
+                        });
+                    }
+                    const [newData, newData2] = disjoinData(appointments);
+                    setDataNormal(orderData(newData));
+                    setDataHistory(orderData(newData2));
                 }
-                const [newData, newData2] = disjoinData(appointments);
-                setDataNormal(orderData(newData));
-                setDataHistory(orderData(newData2));
-            });
-        }
+            } catch (error) {
+                console.error("Erro ao buscar dados:", error);
+            }
+        };
+
+        fetchData();
     }, [userDatas]);
 
-    async function getUser(uid) {
-        const q = query(collection(db, "users"), where("uid", "==", uid));
-        const querySnapshot = await getDocs(q);
-        let list = []
-        querySnapshot.forEach((doc) => {
-            list.push(doc.data())
-        });
-        return list[0]
-    }
-
-    async function getScheduling() {
-        const q = query(collection(db, "scheduling"), where("patientUid", "==", userDatas.uid));
-        const querySnapshot = await getDocs(q);
-        let list = []
-        querySnapshot.forEach((doc) => {
-            list.push(doc.data());
-        });
-        return list
-    }
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
-        getScheduling().then(async (res) => {
+        getScheduling(userDatas).then(async (res) => {
             const appointments = [];
             const json = JSON.parse(JSON.stringify(res));
             if (json.length == 0) {
@@ -158,7 +75,8 @@ export default function Login({ navigation }) {
                     year: appointment.date.split("-")[2],
                     hour: appointment.time.split(":")[0],
                     minute: appointment.time.split(":")[1],
-                    id: appointments.length + 1,
+                    docId: appointment.id,
+                    id: null,
                     address: user.address ? user.address : "Consulta Online",
                 });
             }
@@ -175,6 +93,42 @@ export default function Login({ navigation }) {
 
     return (
         <View style={styles.container}>
+            <Modal
+                animationType="none"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => {
+                    setModalVisible(false);
+                }}
+            >
+                <SafeAreaView style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <Text style={styles.modalText}>Selecione o agendamento que deseja cancelar:</Text>
+                        <Select options={handleToSelectData(dataNormal)} text={"Agendamentos"} onChangeSelect={(item) => {
+                            const appointment = dataNormal.filter((element) => element.id == item)[0];
+                            setSelected(appointment.docId);
+                        }} />
+                        <TouchableOpacity
+                            style={styles.modalButton}
+                            onPress={() => {
+                                setModalVisible(false);
+                                if (selected) {
+                                    deleteScheduling(selected);
+                                    onRefresh();
+                                }
+                                else {
+                                    alert("Nenhum agendamento selecionado", "Selecione um agendamento para continuar");
+                                }
+                            }}
+                        >
+                            <Text style={styles.textStyle}>Cancelar Agendamento</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.backModal} onPress={() => setModalVisible(false)}>
+                            <Text style={styles.textStyle}>Voltar</Text>
+                        </TouchableOpacity>
+                    </View>
+                </SafeAreaView>
+            </Modal>
             <ScrollView
                 refreshControl={
                     <RefreshControl
@@ -201,15 +155,18 @@ export default function Login({ navigation }) {
                         </View>
                     </View>
                     <View style={styles.buttons}>
-                        {userDatas.isDoctor ? <TouchableOpacity style={styles.button} onPress={() => alert("Tela indisponivel no momento")/*navigation.navigate('MinhaAgenda')*/}><Text style={styles.textButton}>Minha agenda</Text></TouchableOpacity>:
+                        {userDatas.isDoctor ? <TouchableOpacity style={styles.button} onPress={() => alert("Tela indisponivel no momento")/*navigation.navigate('MinhaAgenda')*/}><Text style={styles.textButton}>Minha agenda</Text></TouchableOpacity> :
                             <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Médicos')}>
                                 <Text style={styles.textButton}>Agendar Consulta</Text>
                             </TouchableOpacity>
-                            }
-                            <TouchableOpacity style={styles.buttonRed}>
-                                <Text style={styles.textButton}>Cancelar Agendamento</Text>
-                            </TouchableOpacity>
-                        </View>
+                        }
+                        <TouchableOpacity
+                            style={styles.buttonRed}
+                            onPress={() => setModalVisible(true)}
+                        >
+                            <Text style={styles.textButton}>Cancelar Agendamento</Text>
+                        </TouchableOpacity>
+                    </View>
                 </LinearGradient>
             </ScrollView>
         </View>
