@@ -1,9 +1,21 @@
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "../../Config";
 
+async function getSchedules(item) {
+    const schedulesRef = collection(db, "scheduling")
+    const q = query(schedulesRef, where("doctorUid", "==", item.uid))
+    const querySnapshot = await getDocs(q)
+    const schedules = []
+    querySnapshot.forEach((doc) => {
+        schedules.push(doc.data())
+    })
+    return schedules
+}
 
-export async function getFreeHours(dia, mes, ano, startHour, endHour, getSchedules) {
+export async function getFreeHours(dia, mes, ano, startHour, endHour, item) {
     date = new Date()
     const isToday = dia == date.getDate() && mes == date.getMonth() + 1 && ano == date.getFullYear()
-    const schedules = await getSchedules()
+    const schedules = await getSchedules(item)
     const localFreeHours = []
     const busyHours = []
     const pastHours = []
@@ -54,11 +66,16 @@ function getAllDaysInMonth(month, year) {
     return days;
   }
 
-export function getFreeDays(month, year) {
+export function getFreeDays(month, year, item) {
     const today = new Date();
     const days = getAllDaysInMonth(month, year);
+    const workDays = item.workDays; // "0,1,2,3,4,5,6"
+    const workDaysArray = workDays.split(",").map((day) => parseInt(day));
     const pastDays = days.filter((day) => {
         const currentDate = new Date(year, month - 1, day);
+        if (!workDaysArray.includes(currentDate.getDay())) {
+            return true;
+        }
         if (currentDate.getMonth() == today.getMonth()) {
             return (currentDate.getDate() < today.getDate());
         }

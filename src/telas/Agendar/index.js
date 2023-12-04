@@ -8,8 +8,6 @@ import RatingRead from "../../components/RatingRead";
 import createScheduling from "../../services/createScheduling";
 import auth from "../../Config";
 import { useNavigation } from "@react-navigation/native";
-import { collection, getDocs, query, where } from "firebase/firestore";
-import { db } from "../../Config";
 import Select from "../../components/Select";
 import Loading from "../../components/Loading";
 import { getFreeHours, getFreeDays, getFreeMonths, getFreeYears } from "./utils";
@@ -17,10 +15,8 @@ import { getFreeHours, getFreeDays, getFreeMonths, getFreeYears } from "./utils"
 export default function Agendar({ route }) {
     const item = route.params.item
     const filter = route.params.filter
-    const date = new Date()
     const startHour = parseInt(item.startHour)
     const endHour = parseInt(item.endHour)
-    const dateNow = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
     const [time, setTime] = useState({ id: null, label: "Selecione um horário" })
     const [month, setMonth] = useState({ id: null, label: "Selecione um mês" })
     const [year, setYear] = useState({ id: null, label: "Selecione um ano" })
@@ -43,7 +39,7 @@ export default function Agendar({ route }) {
     }
 
     const handleGetFreeHours = async (dia, mes, ano) => {
-        getFreeHours(dia, mes, ano, startHour, endHour, getSchedules)
+        getFreeHours(dia, mes, ano, startHour, endHour, item)
             .then((localFreeHours) => {
                 if (localFreeHours.length === 0) {
                     localFreeHours.push({ id: null, label: "Não há horários disponíveis para esse dia" })
@@ -56,7 +52,7 @@ export default function Agendar({ route }) {
     }
 
     const handleGetFreeDays = (mes, ano) => {
-        const freeDays = getFreeDays(mes, ano);
+        const freeDays = getFreeDays(mes, ano, item);
         const localFreeDays = [];
         if (freeDays.length === 0) {
             localFreeDays.push({ id: null, label: "Não há dias disponíveis para este mês" })
@@ -100,17 +96,6 @@ export default function Agendar({ route }) {
     useEffect(() => {
         handleGetFreeYears()
     }, [])
-
-    async function getSchedules() {
-        const schedulesRef = collection(db, "scheduling")
-        const q = query(schedulesRef, where("doctorUid", "==", item.uid))
-        const querySnapshot = await getDocs(q)
-        const schedules = []
-        querySnapshot.forEach((doc) => {
-            schedules.push(doc.data())
-        })
-        return schedules
-    }
 
     const handleCreateScheduling = () => {
         if (time.label == "Não há horários disponíveis para hoje") {
