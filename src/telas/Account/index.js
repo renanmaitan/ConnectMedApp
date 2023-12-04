@@ -52,12 +52,41 @@ export default function Account({ navigation }) {
             });
     }
 
+    const handleWorkDays = (days) => {
+        const daysArray = days.split(",")
+        const daysString = []
+        daysArray.forEach((day) => {
+            if (parseInt(day) === 0) {
+                daysString.push("Domingo, ")
+            } else if (parseInt(day) === 1) {
+                daysString.push("Segunda, ")
+            } else if (parseInt(day) === 2) {
+                daysString.push("Terça, ")
+            } else if (parseInt(day) === 3) {
+                daysString.push("Quarta, ")
+            } else if (parseInt(day) === 4) {
+                daysString.push("Quinta, ")
+            } else if (parseInt(day) === 5) {
+                daysString.push("Sexta, ")
+            } else if (parseInt(day) === 6) {
+                daysString.push("Sábado, ")
+            }
+        })
+        if (daysString.length === 1) {
+            return daysString[0].replace(", ", "")
+        }
+        daysString[daysString.length - 2] = daysString[daysString.length - 2].replace(", ", " e ")
+        daysString[daysString.length - 1] = daysString[daysString.length - 1].replace(", ", "")
+        return daysString
+    }
+
     const list = [
         { id: 1, name: "Nome", content: userDatas.name },
         ...(userDatas.isDoctor ? [
             { id: 2, name: "Especialidade", content: userDatas.specialty },
             { id: 3, name: "CRM", content: userDatas.register },
             { id: 7, name: "Valor", content: userDatas.value },
+            { id: 8, name: "Dias de Atendimento", content: handleWorkDays(userDatas.workDays) },
         ] : []),
         { id: 4, name: "Email", content: user.email },
         { id: 5, name: "CEP", content: userDatas.cep ? userDatas.cep : "Nenhum CEP cadastrado" },
