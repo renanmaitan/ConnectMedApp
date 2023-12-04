@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { View, Text, TouchableOpacity, FlatList } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { FontAwesome5 } from "@expo/vector-icons"
@@ -49,21 +49,24 @@ export default function Presencial({ navigation, route }) {
 
     const [specialities, setSpecialities] = useState([])
 
-    useState(() => {
-        getSpecialty().then((res) => {
-            setSpecialities(res)
-        })
-        if (filter == "Presencial") {
-            navigation.setOptions({
-                title: "Presencial",
-            })
-        }
-        else {
-            navigation.setOptions({
-                title: "Online",
-            })
-        }
-    }, [])
+    useEffect(() => {
+        const fetchData = async () => {
+            const res = await getSpecialty();
+            setSpecialities(res);
+
+            if (filter === "Presencial") {
+                navigation.setOptions({
+                    title: "Presencial",
+                });
+            } else {
+                navigation.setOptions({
+                    title: "Online",
+                });
+            }
+        };
+
+        fetchData();
+    }, [filter, navigation]);
 
     const endereco = {
         cep: "12345678",
