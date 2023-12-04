@@ -87,6 +87,7 @@ export default function Account({ navigation }) {
             { id: 3, name: "CRM", content: userDatas.register },
             { id: 7, name: "Valor", content: userDatas.value },
             { id: 8, name: "Dias de Atendimento", content: handleWorkDays(userDatas.workDays) },
+            { id: 9, name: "Horário de Atendimento", content: "Das " + userDatas.startHour + " às " + userDatas.endHour}
         ] : []),
         { id: 4, name: "Email", content: user.email },
         { id: 5, name: "CEP", content: userDatas.cep ? userDatas.cep : "Nenhum CEP cadastrado" },

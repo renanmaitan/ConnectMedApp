@@ -101,7 +101,7 @@ export default function Login({ navigation }) {
     return (
         <View style={styles.container}>
             <Modal
-                animationType="none"
+                animationType="fade"
                 transparent={true}
                 visible={modalVisible}
                 onRequestClose={() => {
@@ -162,7 +162,7 @@ export default function Login({ navigation }) {
                         </View>
                     </View>
                     <View style={styles.buttons}>
-                        {userDatas.isDoctor ? <TouchableOpacity style={styles.button} onPress={() => alert("Tela indisponivel no momento")/*navigation.navigate('MinhaAgenda')*/}><Text style={styles.textButton}>Minha agenda</Text></TouchableOpacity> :
+                        {userDatas.isDoctor ? <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Agenda')}><Text style={styles.textButton}>Minha agenda</Text></TouchableOpacity> :
                             <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Médicos')}>
                                 <Text style={styles.textButton}>Agendar Consulta</Text>
                             </TouchableOpacity>

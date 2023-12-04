@@ -7,6 +7,7 @@ import { FontAwesome5 } from "@expo/vector-icons"
 
 import Home from "../telas/Home"
 import Account from "../telas/Account"
+import Agenda from "../telas/Agenda"
 
 
 const Stack = createStackNavigator()
@@ -48,6 +49,15 @@ function Tabs() {
         }}
       />
       <Tab.Screen
+        name="Agenda"
+        component={Agenda}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <FontAwesome5 name="calendar-alt" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tab.Screen
         name="Minha Conta"
         component={Account}
         options={{
@@ -65,6 +75,7 @@ export default function AppDoctor() {
   return (
     <Stack.Navigator initialRouteName="Home" screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Home" component={Tabs} />
+      
       {/* <Stack.Screen name="Agendar" component={Agendar}
         options={{
           headerShown: true,

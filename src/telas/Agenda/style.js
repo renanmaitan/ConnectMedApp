@@ -1,77 +1,66 @@
 import { StyleSheet } from "react-native";
 
-
-const styles = StyleSheet.create({
+export default styles = StyleSheet.create({
     container: {
-        width: '100%',
-        alignItems: 'center',
-        backgroundColor: '#DFEDEB',
         flex: 1,
+        backgroundColor: "#086972",
+        alignItems: "center",
+        justifyContent: "center",
     },
     scrollview: {
         backgroundColor: '#DFEDEB',
         width: '100%',
         alignItems: 'center',
+        justifyContent: 'center',
         flex: 1,
     },
     title: {
         fontFamily: 'sans-serif-light',
-        fontSize: 30,
+        fontSize: 24,
         fontWeight: 'bold',
         color: '#FFF',
-        marginTop: "10%",
         textShadowColor: 'rgba(0, 0, 0, 0.75)',
-        textShadowOffset: { width: -1, height: 1 },
+        textShadowOffset: {width: -1, height: 1},
         textShadowRadius: 2,
     },
-    carousel: {
-        width: '100%',
-        alignItems: 'center',
+    local: {
+        backgroundColor: '#DFEDEB',
+        width: '90%',
+        height: '20%',
         borderRadius: 10,
-        marginTop: "6%",
-        marginBottom: "5%",
+        marginTop: '10%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        shadowColor: '#000',
+        shadowOffset: {width: 0, height: 2},
+        shadowRadius: 3.84,
+        elevation: 20,
     },
-    carouselTitle: {
+    online: {
+        width: '90%',
+        height: '20%',
+        borderRadius: 10,
+        marginTop: '10%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        shadowColor: '#000',
+        shadowOffset: {width: 0, height: 2},
+        shadowRadius: 3.84,
+        elevation: 20,
+        backgroundColor: '#FFF',
+    },
+    optionText: {
         fontFamily: 'sans-serif-light',
         fontSize: 18,
-        fontWeight: 'bold',
-        marginBottom: "2%",
-        color: '#FFF',
-        textShadowColor: 'rgba(0, 0, 0, 0.75)',
-        textShadowOffset: { width: -1, height: 1 },
-        textShadowRadius: 1,
-    },
-    carouselBody: {
-        width: '100%',
-    },
-    button: {
-        backgroundColor: '#086972',
-        borderRadius: 10,
-        padding: "3%",
-        marginTop: "2%",
-        width: '60%',
-        alignItems: 'center',
-    },
-    buttons: {
-        width: '100%',
-        marginTop: "4%",
-        alignItems: 'center',
-    },
-    buttonRed: {
-        backgroundColor: 'rgba(150, 0, 0, 1)',
-        borderRadius: 10,
-        padding: "3%",
-        marginTop: "4%",
-        width: '60%',
-        alignItems: 'center',
-        marginBottom: "10%",
-    },
-    textButton: {
-        fontFamily: 'sans-serif-light',
-        fontSize: 18,
-        fontWeight: 'bold',
         color: '#FFF',
         textAlign: 'center',
+    },
+    gradient: {
+        width: '100%',
+        height: '100%',
+        borderRadius: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     centeredView: {
         flex: 1,
@@ -117,6 +106,9 @@ const styles = StyleSheet.create({
         marginTop: "4%",
         alignItems: 'center',
     },
-});
-
-export default styles;
+    selectContainer: {
+        alignItems: "center",
+        width: "95%",
+        marginVertical: "2%",
+    },
+})
