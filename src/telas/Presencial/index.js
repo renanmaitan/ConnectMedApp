@@ -8,12 +8,14 @@ import Select from "../../components/Select";
 import RatingRead from "../../components/RatingRead";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "../../Config";
+import Loading from "../../components/Loading";
 
 export default function Presencial({ navigation, route }) {
 
     const filter = route.params.filter
 
     const [data, setData] = useState(null)
+    const [loading, setLoading] = useState(false)
 
     const getDoctorsSpecialty = async (specialty) => {
         const q = query(collection(db, "users"), where("specialty", "==", specialty), where("modality", "in", [filter, "Presencial e Online"]));
@@ -50,6 +52,7 @@ export default function Presencial({ navigation, route }) {
     const [specialities, setSpecialities] = useState([])
 
     useEffect(() => {
+        setLoading(true)
         const fetchData = async () => {
             const res = await getSpecialty();
             setSpecialities(res);
@@ -57,14 +60,17 @@ export default function Presencial({ navigation, route }) {
             if (filter === "Presencial") {
                 navigation.setOptions({
                     title: "Presencial",
+                    headerShown: true,
                 });
+                setLoading(false)
             } else {
                 navigation.setOptions({
                     title: "Online",
+                    headerShown: true,
                 });
+                setLoading(false)
             }
         };
-
         fetchData();
     }, [filter, navigation]);
 
@@ -105,15 +111,23 @@ export default function Presencial({ navigation, route }) {
         }
     }
 
+    if (loading) {
+        return <Loading />
+    }
+
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <Text>Seu CEP: {endereco.cep}</Text>
-                <Text>{endereco.rua}, {endereco.numero} - {endereco.bairro}</Text>
-                <Text>{endereco.cidade}/{endereco.estado}</Text>
-                <TouchableOpacity onPress={() => navigation.navigate("Minha Conta")}>
-                    <Text style={styles.changeZip}>Alterar CEP (Dados cadastrais)</Text>
-                </TouchableOpacity>
+                {filter === "Presencial" && (
+                    <>
+                        <Text>Seu CEP: {endereco.cep}</Text>
+                        <Text>{endereco.rua}, {endereco.numero} - {endereco.bairro}</Text>
+                        <Text>{endereco.cidade}/{endereco.estado}</Text>
+                        <TouchableOpacity onPress={() => navigation.navigate("Minha Conta")}>
+                            <Text style={styles.changeZip}>Alterar CEP (Dados cadastrais)</Text>
+                        </TouchableOpacity>
+                    </>
+                )}
                 <View style={styles.select}>
                     <Text style={styles.text}>Filtrar busca por especialidade:</Text>
                     <Select options={specialities} onChangeSelect={(id) => catchList(id)} text="Selecione uma especialidade"></Select>
@@ -172,7 +186,7 @@ export default function Presencial({ navigation, route }) {
             ) : (
                 <View style={styles.emptyContainer}>
                     <Text style={styles.emptyText}
-                    >Não há médicos disponíveis para a especialidade selecionada na modalidade presencial</Text>
+                    >Não há médicos disponíveis para a especialidade selecionada na modalidade {filter}</Text>
                 </View>
             )}
         </View>

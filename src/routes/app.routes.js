@@ -46,7 +46,7 @@ function MedicosStack() {
         component={Presencial}
         options={
           {
-            headerShown: true,
+            headerShown: false,
             headerStyle: styles.header,
             headerTintColor: '#FFF',
           }
