@@ -15,9 +15,8 @@ export function UserProvider({ children }) {
             const user = auth.currentUser;
             const q = query(collection(db, "users"), where("uid", "==", user.uid));
             const querySnapshot = await getDocs(q);
-            querySnapshot.forEach((doc) => {
-                setUserDatas(doc.data());
-            });
+            const item = querySnapshot.docs[0].data();
+            setUserDatas(item);
             setLoading(false);
         }
         auth.onAuthStateChanged((user) => {

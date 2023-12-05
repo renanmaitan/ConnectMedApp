@@ -1,17 +1,13 @@
 import React, { useState } from "react";
-import { View, StyleSheet, Text } from "react-native";
-
-import { db } from "../../Config";
-import { collection, getDocs, addDoc, doc } from "firebase/firestore";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { View, Text } from "react-native";
 import Select from "../../components/Select";
 import styles from "./style";
-import { FontAwesome5 } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native";
 import { TextInput } from "react-native";
-import auth from "../../Config";
 import { ScrollView } from "react-native";
 import { Alert } from "react-native";
+import { createDoctorUser } from "../../services/services";
+import { getSpecialties } from "../../services/services";
 
 export default function App(routes) {
 
@@ -99,56 +95,9 @@ export default function App(routes) {
         }
         return true
     }
-
-    const handleCreateUser = async () => {
-        if (!validateForm()) {
-            return
-        }
-        try {
-            const userCredential = await createUserWithEmailAndPassword(auth, form.email, form.password);
-            const user = userCredential.user;
-
-            const docRef = await addDoc(collection(db, "users"), {
-                name: form.name,
-                birthDate: form.birthDate,
-                cpf: form.cpf,
-                phone: form.phone,
-                cep: form.cep,
-                uid: user.uid,
-                isDoctor: form.isDoctor,
-                specialty: doctorForm.specialty,
-                register: doctorForm.register,
-                value: doctorForm.value,
-                modality: doctorForm.modality,
-                address: doctorForm.address,
-                bairro: doctorForm.bairro,
-                city: doctorForm.city,
-                cep: doctorForm.cep,
-                points: 5,
-                price: doctorForm.value,
-                startHour: doctorForm.startHour,
-                endHour: doctorForm.endHour,
-                workDays: doctorForm.workDays
-            });
-
-        } catch (error) {
-            console.error(error);
-            Alert.alert(error.message);
-        }
-    };
-
-    const getSpecialty = async () => {
-        const q = collection(db, "specialty");
-        const querySnapshot = await getDocs(q);
-        let list = []
-        querySnapshot.forEach((doc) => {
-            list.push(doc.data())
-        });
-        return list
-    }
-
+    
     useState(() => {
-        getSpecialty().then((res) => {
+        getSpecialties().then((res) => {
             const newList = res.filter((item) => item.id !== "todos")
             setSpecialities(newList)
         })
@@ -394,7 +343,11 @@ export default function App(routes) {
                     <Text style={[styles.text, {margin: "2%" }]}>Dias selecionados: </Text>
                     <Text style={[styles.text, {marginHorizontal: "2%", textAlign: "center" }]}>{handleWorkDays(doctorForm.workDays)}</Text>
                 </View>
-                <TouchableOpacity style={styles.button} onPress={() => { handleCreateUser() }}>
+                <TouchableOpacity style={styles.button} onPress={() => { 
+                    if(validateForm()){
+                        createDoctorUser(form, doctorForm)
+                    }
+                 }} >
                     <Text style={{ color: "white", fontSize: 16 }}>Cadastrar</Text>
                 </TouchableOpacity>
             </View>

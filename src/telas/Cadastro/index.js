@@ -1,14 +1,10 @@
 import React, { useRef, useState, useEffect } from "react"
 
 import { View, Text, TextInput, TouchableOpacity, ScrollView, FlatList, Alert } from "react-native"
-import { createUserWithEmailAndPassword } from "firebase/auth"
-import { collection, addDoc, doc } from "firebase/firestore";
-import auth from "../../Config"
-
 import MaskInput, { Masks } from 'react-native-mask-input'
 import * as validate from "./utils";
+import { createUser } from "../../services/services"
 
-import { db } from "../../Config";
 import styles from "./style"
 import Logo from "./Logo"
 
@@ -28,26 +24,6 @@ export default function Login({ navigation }) {
     const [error, setError] = useState(null)
     const scrollViewRef = useRef();
 
-    const handleCreateUser = async () => {
-        try {
-            const userCredential = await createUserWithEmailAndPassword(auth, form.email, form.password);
-            const user = userCredential.user;
-
-            const docRef = await addDoc(collection(db, "users"), {
-                name: form.name,
-                birthDate: form.birthDate,
-                cpf: form.cpf,
-                phone: form.phone,
-                cep: form.cep,
-                uid: user.uid,
-                isDoctor: form.isDoctor,
-            });
-        } catch (error) {
-            console.error(error);
-            Alert.alert(error.message);
-        }
-    };
-
     const handleForm = (key, value) => {
         setForm((currentForm) => ({
             ...currentForm,
@@ -57,7 +33,7 @@ export default function Login({ navigation }) {
 
     const submitForm = () => {
         if (validation()) {
-            handleCreateUser();
+            createUser(form)
         }
     };
 

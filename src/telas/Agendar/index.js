@@ -10,13 +10,11 @@ import auth from "../../Config";
 import { useNavigation } from "@react-navigation/native";
 import Select from "../../components/Select";
 import Loading from "../../components/Loading";
-import { getFreeHours, getFreeDays, getFreeMonths, getFreeYears } from "./utils";
+import { getFreeHours, getFreeDays, getFreeMonths, getFreeYears } from "../../utils/scheduling";
 
 export default function Agendar({ route }) {
     const item = route.params.item
     const filter = route.params.filter
-    const startHour = parseInt(item.startHour)
-    const endHour = parseInt(item.endHour)
     const [time, setTime] = useState({ id: null, label: "Selecione um horário" })
     const [month, setMonth] = useState({ id: null, label: "Selecione um mês" })
     const [year, setYear] = useState({ id: null, label: "Selecione um ano" })
@@ -39,7 +37,7 @@ export default function Agendar({ route }) {
     }
 
     const handleGetFreeHours = async (dia, mes, ano) => {
-        getFreeHours(dia, mes, ano, startHour, endHour, item)
+        getFreeHours(dia, mes, ano, item)
             .then((localFreeHours) => {
                 if (localFreeHours.length === 0) {
                     localFreeHours.push({ id: null, label: "Não há horários disponíveis para esse dia" })
@@ -52,17 +50,19 @@ export default function Agendar({ route }) {
     }
 
     const handleGetFreeDays = (mes, ano) => {
-        const freeDays = getFreeDays(mes, ano, item);
-        const localFreeDays = [];
-        if (freeDays.length === 0) {
-            localFreeDays.push({ id: null, label: "Não há dias disponíveis para este mês" })
-            setFreeDays(localFreeDays);
-            return;
-        }
-        freeDays.forEach((day, i) => {
-            localFreeDays.push({ id: i, label: day });
-        });
-        setFreeDays(localFreeDays);
+        getFreeDays(mes, ano, item)
+            .then((freeDays) => {
+                const localFreeDays = [];
+                if (freeDays.length === 0) {
+                    localFreeDays.push({ id: null, label: "Não há dias disponíveis para este mês" })
+                    setFreeDays(localFreeDays);
+                    return;
+                }
+                freeDays.forEach((day, i) => {
+                    localFreeDays.push({ id: i, label: day });
+                });
+                setFreeDays(localFreeDays);
+            })
     }
 
     const handleGetFreeMonths = (ano) => {

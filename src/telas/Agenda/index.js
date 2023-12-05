@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { View, Text, TouchableOpacity, Modal, SafeAreaView } from 'react-native';
 import { LinearGradient } from "expo-linear-gradient";
-import { getFreeDays, getFreeMonths, getFreeYears } from './utils';
-import auth from '../../Config';
-import { db } from '../../Config';
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import { getFreeDays, getFreeMonths, getFreeYears, getFreeHours } from '../../utils/scheduling';
+import { addDeleteDay, addDeleteHour } from '../../services/services';
+import UserContext from '../../contexts/userData';
 
 import styles from "./style";
 import Select from '../../components/Select';
@@ -12,27 +11,46 @@ import Loading from '../../components/Loading';
 
 export default function Agenda({ navigation }) {
     const [item, setItem] = useState({});
-    const [modalVisible, setModalVisible] = useState(false);
+    const [modalDayVisible, setModalDayVisible] = useState(false);
+    const [modalHourVisible, setModalHourVisible] = useState(false);
     const [loading, setLoading] = useState(false);
     const [freeDays, setFreeDays] = useState([]);
     const [freeMonths, setFreeMonths] = useState([]);
     const [freeYears, setFreeYears] = useState([]);
+    const [freeHours, setFreeHours] = useState([]);
     const [year, setYear] = useState({ id: null, label: "Selecione um ano" });
     const [month, setMonth] = useState({ id: null, label: "Selecione um mês" });
     const [day, setDay] = useState({ id: null, label: "Selecione um dia" });
+    const [hour, setHour] = useState({ id: null, label: "Selecione uma hora" });
+    const { userDatas } = useContext(UserContext);
+
+    const handleGetFreeHours = (dia, mes, ano) => {
+        getFreeHours(dia, mes, ano, item)
+            .then((localFreeHours) => {
+                if (localFreeHours.length === 0) {
+                    localFreeHours.push({ id: null, label: "Não há horários disponíveis para esse dia" })
+                }
+                setFreeHours(localFreeHours)
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+    }
 
     const handleGetFreeDays = (mes, ano) => {
-        const freeDays = getFreeDays(mes, ano, item);
-        const localFreeDays = [];
-        if (freeDays.length === 0) {
-            localFreeDays.push({ id: null, label: "Não há dias disponíveis para este mês" })
-            setFreeDays(localFreeDays);
-            return;
-        }
-        freeDays.forEach((day, i) => {
-            localFreeDays.push({ id: i, label: day });
-        });
-        setFreeDays(localFreeDays);
+        getFreeDays(mes, ano, item)
+            .then((freeDays) => {
+                const localFreeDays = [];
+                if (freeDays.length === 0) {
+                    localFreeDays.push({ id: null, label: "Não há dias disponíveis para este mês" })
+                    setFreeDays(localFreeDays);
+                    return;
+                }
+                freeDays.forEach((day, i) => {
+                    localFreeDays.push({ id: i, label: day });
+                });
+                setFreeDays(localFreeDays);
+            })
     }
 
     const handleGetFreeMonths = (ano) => {
@@ -64,22 +82,17 @@ export default function Agenda({ navigation }) {
     }
 
     const handleCloseModal = () => {
-        setModalVisible(false);
+        setModalDayVisible(false);
+        setModalHourVisible(false);
         setYear({ id: null, label: "Selecione um ano" });
         setMonth({ id: null, label: "Selecione um mês" });
         setDay({ id: null, label: "Selecione um dia" });
+        setHour({ id: null, label: "Selecione uma hora" });
     }
 
     useEffect(() => {
-        async function getDados() {
-            const userUid = auth.currentUser.uid;
-            const userRef = collection(db, "users");
-            const q = query(userRef, where("uid", "==", userUid));
-            const querySnapshot = await getDocs(q);
-            const item = querySnapshot.docs[0].data();
-            setItem(item);
-        }
-        getDados();
+        setLoading(false)
+        setItem(userDatas)
         handleGetFreeYears()
     }, [])
 
@@ -92,9 +105,9 @@ export default function Agenda({ navigation }) {
             <Modal
                 animationType="fade"
                 transparent={true}
-                visible={modalVisible}
+                visible={modalDayVisible}
                 onRequestClose={() => {
-                    setModalVisible(false);
+                    setModalDayVisible(false);
                 }}
             >
                 <SafeAreaView style={styles.centeredView}>
@@ -142,7 +155,10 @@ export default function Agenda({ navigation }) {
                             style={styles.modalButton}
                             onPress={() => {
                                 if (day.id != null && month.id != null && year.id != null) {
-                                    console.log("Data selecionada", "A data selecionada foi: " + day.label + "/" + month.label + "/" + year.label)
+                                    addDeleteDay(day.label, month.label, year.label, item).then(() => {
+                                        alert("Data excluída com sucesso", "A data selecionada foi excluída da sua agenda")
+                                        handleCloseModal()
+                                    })
                                 }
                                 else {
                                     alert("Nenhuma data selecionada", "Selecione uma data para continuar a exlusão do dia")
@@ -157,6 +173,90 @@ export default function Agenda({ navigation }) {
                     </View>
                 </SafeAreaView>
             </Modal>
+            <Modal
+                animationType="fade"
+                transparent={true}
+                visible={modalHourVisible}
+                onRequestClose={() => {
+                    setModalHourVisible(false);
+                }}
+            >
+                <SafeAreaView style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <Text style={styles.modalText}>Selecione a hora que deseja excluir da sua agenda:</Text>
+                        <View style={styles.selectContainer}>
+                            <Select
+                                options={freeYears}
+                                text={year.label}
+                                onChangeSelect={(value) => {
+                                    setLoading(true)
+                                    const selected = freeYears.find((item) => item.id == value)
+                                    setYear(selected)
+                                    handleGetFreeMonths(selected.label)
+                                    setLoading(false)
+                                }}
+                            />
+                        </View>
+                        {year.id != null && <View style={styles.selectContainer}>
+                            <Select
+                                options={freeMonths}
+                                text={month.label}
+                                onChangeSelect={(value) => {
+                                    setLoading(true)
+                                    const selected = freeMonths.find((item) => item.id == value)
+                                    setMonth(selected)
+                                    handleGetFreeDays(selected.label, year.label)
+                                    setLoading(false)
+                                }}
+                            />
+                        </View>}
+                        {month.id != null && <View style={styles.selectContainer}>
+                            <Select
+                                options={freeDays}
+                                text={day.label}
+                                onChangeSelect={(value) => {
+                                    setLoading(true)
+                                    const selected = freeDays.find((item) => item.id == value)
+                                    setDay(selected)
+                                    handleGetFreeHours(selected.label, month.label, year.label)
+                                    setLoading(false)
+                                }}
+                            />
+                        </View>}
+                        {day.id != null && <View style={styles.selectContainer}>
+                            <Select
+                                options={freeHours}
+                                text={hour.label}
+                                onChangeSelect={(value) => {
+                                    setLoading(true)
+                                    const selected = freeHours.find((item) => item.id == value)
+                                    setHour(selected)
+                                    setLoading(false)
+                                }}
+                            />
+                        </View>}
+                        <TouchableOpacity
+                            style={styles.modalButton}
+                            onPress={() => {
+                                if (day.id != null && month.id != null && year.id != null && hour.id != null) {
+                                    addDeleteHour(day.label, month.label, year.label, hour.label, item).then(() => {
+                                        alert("Horário excluído com sucesso", "O horário selecionado foi excluído da sua agenda")
+                                        handleCloseModal()
+                                    })
+                                }
+                                else {
+                                    alert("Nenhum horário selecionado", "Selecione um horário para continuar a exlusão do horário")
+                                }
+                            }}
+                        >
+                            <Text style={styles.textStyle}>Excluir horário da agenda</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.backModal} onPress={() => handleCloseModal()}>
+                            <Text style={styles.textStyle}>Voltar</Text>
+                        </TouchableOpacity>
+                    </View>
+                </SafeAreaView>
+            </Modal>
             <LinearGradient
                 colors={['#086972', 'transparent']}
                 style={styles.scrollview}
@@ -164,7 +264,7 @@ export default function Agenda({ navigation }) {
                 <Text style={styles.title}>Manipulação da sua agenda</Text>
                 <TouchableOpacity
                     style={styles.local}
-                    onPress={() => setModalVisible(true)}
+                    onPress={() => setModalDayVisible(true)}
                 >
                     <LinearGradient
                         start={{ x: 0.0, y: 1 }} end={{ x: 1.2, y: 1.0 }}
@@ -174,14 +274,17 @@ export default function Agenda({ navigation }) {
                         <Text style={[styles.optionText, { fontSize: 16, marginTop: "2%" }]}>(remover determinado dia de seus dias livres para agendamento)</Text>
                     </LinearGradient>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.online} onPress={() => navigation.navigate('Presencial', { filter: 'Online' })}>
+                <TouchableOpacity
+                    style={styles.online}
+                    onPress={() => setModalHourVisible(true)}
+                >
                     <LinearGradient
                         colors={['green', 'transparent']}
                         style={styles.gradient}
                         start={{ x: 0.0, y: 1 }} end={{ x: 1.2, y: 1.0 }}
                     >
                         <Text style={styles.optionText}>Excluir horário livre da agenda</Text>
-                        <Text style={[styles.optionText, { fontSize: 16, marginTop: "2%" }]}>(remover determinado horário ou intervalo de horários de seus horários livres para agendamento)</Text>
+                        <Text style={[styles.optionText, { fontSize: 16, marginTop: "2%" }]}>(remover determinado horário de seus horários livres para agendamento)</Text>
                     </LinearGradient>
                 </TouchableOpacity>
             </LinearGradient>

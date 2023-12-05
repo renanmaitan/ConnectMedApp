@@ -1,5 +1,6 @@
 import { collection, getDocs, query, where } from "firebase/firestore";
-import { db } from "../../Config";
+import { db } from "../Config";
+import { getDeleteDays, getDeleteHours } from "../services/services";
 
 async function getSchedules(item) {
     const schedulesRef = collection(db, "scheduling")
@@ -12,8 +13,8 @@ async function getSchedules(item) {
     return schedules
 }
 
-export async function getFreeHours(dia, mes, ano, startHour, endHour, item) {
-    date = new Date()
+export async function getFreeHours(dia, mes, ano, item) {
+    const date = new Date()
     const isToday = dia == date.getDate() && mes == date.getMonth() + 1 && ano == date.getFullYear()
     const schedules = await getSchedules(item)
     const localFreeHours = []
@@ -21,6 +22,8 @@ export async function getFreeHours(dia, mes, ano, startHour, endHour, item) {
     const pastHours = []
     const notPastHours = []
     const notAvailableHours = []
+    const startHour = parseInt(item.startHour)
+    const endHour = parseInt(item.endHour)
     for (let i = startHour; i < endHour; i++) {
         const hour00 = `${i}:00`
         const hour30 = `${i}:30`
@@ -45,6 +48,15 @@ export async function getFreeHours(dia, mes, ano, startHour, endHour, item) {
             busyHours.push(`${hour}:${minute}`)
         }
     })
+    await getDeleteHours(item, dia, mes, ano)
+        .then((deleteHours) => {
+            deleteHours.forEach((deleteHour) => {
+                busyHours.push(deleteHour.hour)
+            })
+        })
+        .catch((error) => {
+            console.log(error)
+        })
     notPastHours.forEach((hour, i) => {
         if (!busyHours.includes(hour)) {
             localFreeHours.push({ id: i, label: hour })
@@ -66,10 +78,10 @@ function getAllDaysInMonth(month, year) {
     return days;
   }
 
-export function getFreeDays(month, year, item) {
+export async function getFreeDays(month, year, item) {
     const today = new Date();
     const days = getAllDaysInMonth(month, year);
-    const workDays = item.workDays; // "0,1,2,3,4,5,6"
+    const workDays = item.workDays;
     const workDaysArray = workDays.split(",").map((day) => parseInt(day));
     const pastDays = days.filter((day) => {
         const currentDate = new Date(year, month - 1, day);
@@ -81,6 +93,15 @@ export function getFreeDays(month, year, item) {
         }
         return (currentDate < today);
     });
+    await getDeleteDays(item, month, year)
+        .then((deleteDays) => {
+            deleteDays.forEach((deleteDay) => {
+                pastDays.push(deleteDay.day)
+            })
+        })
+        .catch((error) => {
+            console.log(error)
+        })
     const freeDays = days.filter((day) => !pastDays.includes(day));
     return freeDays;
 }
