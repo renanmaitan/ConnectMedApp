@@ -10,6 +10,8 @@ import { ScrollView } from "react-native";
 import { disjoinData, orderData, getScheduling, getUser, handleToSelectData, deleteScheduling } from "./utils";
 import { Modal } from "react-native";
 import Select from "../../components/Select";
+import { FontAwesome5 } from "@expo/vector-icons";
+import { Alert } from "react-native";
 
 export default function Login({ navigation }) {
 
@@ -152,6 +154,13 @@ export default function Login({ navigation }) {
                     colors={['#086972', 'transparent']}
                     style={styles.scrollview}
                 >
+                    <View style={styles.versionDetails}>
+                        <TouchableOpacity onPress={() => {
+                            Alert.alert("Versão 1.0.0", "Futuras atualizações e melhorias: \n\n-Para pacientes: \n °Adição de sistema de avaliação dos médicos \n\n-Para médicos:\n °Reativar um dia/horário excluído da agenda\n\n-Chat ao vivo entre médico e paciente\n-Adição de foto de perfil\n-Centralização dos serviços de banco de dados em uma api\n-Melhoria na legibilidade e organização do código\n\nNotas: Foi possível aprender muito sobre react native no desenvolvimento desse aplicativo, pretendo aprimorar o código com meus conhecimentos mais recentes")
+                        }}>
+                            <FontAwesome5 name="info-circle" size={24} color="#fff" />
+                        </TouchableOpacity>
+                    </View>
                     <Text style={styles.title}>Olá, {userDatas?.name.split(" ")[0]}!</Text>
                     <View style={styles.carousel}>
                         <Text style={styles.carouselTitle}>Seus agendamentos:</Text>

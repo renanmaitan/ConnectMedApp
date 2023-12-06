@@ -19,7 +19,6 @@ const styles = StyleSheet.create({
         fontSize: 30,
         fontWeight: 'bold',
         color: '#FFF',
-        marginTop: "10%",
         textShadowColor: 'rgba(0, 0, 0, 0.75)',
         textShadowOffset: { width: -1, height: 1 },
         textShadowRadius: 2,
@@ -116,6 +115,12 @@ const styles = StyleSheet.create({
     backModal: {
         marginTop: "4%",
         alignItems: 'center',
+    },
+    versionDetails: {
+        width: '100%',
+        alignItems: 'flex-end',
+        paddingHorizontal: "5%",
+        marginTop: "1%",
     },
 });
 
