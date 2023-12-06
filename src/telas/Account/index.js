@@ -10,6 +10,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { updateUser, updateUserEmail, updateUserPassword } from '../../services/services';
 import Select from '../../components/Select';
 import { getSpecialties } from '../../services/services';
+import MaskInput, { Masks } from 'react-native-mask-input'
 
 import styles from "./style";
 
@@ -27,6 +28,7 @@ export default function Account({ navigation }) {
     const [modalValue, setModalValue] = useState("");
     const [specialities, setSpecialities] = useState([])
     const [modalStartHour, setModalStartHour] = useState("")
+    const [mask, setMask] = useState(Masks.DEFAULT)
 
     useEffect(() => {
         if (Object.keys(userDatas).length > 0) {
@@ -88,6 +90,9 @@ export default function Account({ navigation }) {
             } else if (item.name === "CEP") {
                 await updateUser({ cep: value });
                 setUserDatas((prevUserDatas) => ({ ...prevUserDatas, cep: value }));
+            } else if (item.name === "Telefone") {
+                await updateUser({ phone: value });
+                setUserDatas((prevUserDatas) => ({ ...prevUserDatas, phone: value }));
             } else if (item.name === "Especialidade") {
                 await updateUser({ specialty: value });
                 setUserDatas((prevUserDatas) => ({ ...prevUserDatas, specialty: value }));
@@ -228,6 +233,7 @@ export default function Account({ navigation }) {
             { id: 9, name: "Horário de Atendimento", content: "Das " + userDatas.startHour + " às " + userDatas.endHour }
         ] : []),
         { id: 2, name: "Email", content: user.email },
+        { id: 10, name: "Telefone", content: userDatas.phone ? userDatas.phone : "Nenhum telefone cadastrado" },
         { id: 3, name: "CEP", content: userDatas.cep ? userDatas.cep : "Nenhum CEP cadastrado" },
         { id: 4, name: "Senha", content: "********" },
     ]
@@ -247,7 +253,7 @@ export default function Account({ navigation }) {
                         <Text style={styles.modalText}>{modalTitle}</Text>
                         {modalItem?.name !== "Especialidade" ? (
                             <>
-                                <TextInput
+                                <MaskInput
                                     style={styles.modalInput}
                                     placeholder={modalContent}
                                     secureTextEntry={modalItem?.name === "Senha" ? true : false}
@@ -264,6 +270,8 @@ export default function Account({ navigation }) {
                                         ? { onChangeText: (text) => setModalStartHour(text)}
                                         : { onChangeText: (text) => setModalValue(text)})}
                                     {...(modalItem?.name === "Horário de Atendimento" ? { keyboardType: "numeric" } : null)}
+                                    mask={mask}
+                                    {...(modalItem?.name === "Horário de Atendimento" ? { value: modalStartHour } : {value: modalValue})}
                                 />
                                 {modalItem?.name === "Horário de Atendimento" ? (
                                     <TextInput style={styles.modalInput}
@@ -326,6 +334,7 @@ export default function Account({ navigation }) {
                                     setModalTitle(`Alterar ${item.name}`)
                                     {item.name == "Dias de Atendimento"?setModalContent("Ex: 0,1,2,3,4,5,6 (domingo a sábado)") : item.name == "Horário de Atendimento"?setModalContent("Digite o horário inicial"):setModalContent(`Digite o novo ${item.name.toLowerCase()}`)}
                                     setModalVisible(true)
+                                    {item.name == "Telefone"? setMask(Masks.BRL_PHONE): item.name == "CEP"? setMask(Masks.ZIP_CODE): setMask(Masks.DEFAULT)}
                                 }}
                             >
                                 <View style={styles.labelField}>
