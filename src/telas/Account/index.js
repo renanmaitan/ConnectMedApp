@@ -279,7 +279,6 @@ export default function Account({ navigation }) {
                                         keyboardType='numeric'
                                         onChangeText={(text) => {
                                             setModalValue(modalStartHour + "-" + text)
-                                            console.log(modalValue)
                                         }}
                                     />
                                 ) : null}
