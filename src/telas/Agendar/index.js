@@ -32,7 +32,7 @@ export default function Agendar({ route }) {
         time: time.label,
         modality: item.modality,
         specialty: item.specialty,
-        value: item.price,
+        value: item.value,
         patientUid: auth.currentUser.uid
     }
 
@@ -155,7 +155,7 @@ export default function Agendar({ route }) {
                                 </View>
                                 <View style={styles.bodyContent}>
                                     <FontAwesome5 name="coins" size={16} color="#fff" />
-                                    <Text style={styles.itemText}>{item.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</Text>
+                                    <Text style={styles.itemText}>{item.value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</Text>
                                 </View>
                             </View>
                         </View>

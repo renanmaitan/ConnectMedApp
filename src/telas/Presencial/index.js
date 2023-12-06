@@ -166,7 +166,7 @@ export default function Presencial({ navigation, route }) {
                                             </View>
                                             <View style={styles.bodyContent}>
                                                 <FontAwesome5 name="coins" size={16} color="#fff" />
-                                                <Text style={styles.itemText}>{item.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</Text>
+                                                <Text style={styles.itemText}>{item.value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</Text>
                                             </View>
                                             {filter == "Presencial" && <View style={styles.bodyContent}>
                                                 <FontAwesome5 name="map-marker-alt" size={16} color="#fff" />
