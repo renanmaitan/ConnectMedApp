@@ -15,7 +15,6 @@ export default styles = StyleSheet.create({
     },
     button: {
         backgroundColor: "#B30000",
-        // vermelho escuro #B30000
         width: "90%",
         borderRadius: 5,
         padding: "4%",
@@ -65,6 +64,59 @@ export default styles = StyleSheet.create({
         fontWeight: "bold",
         fontFamily: "sans-serif-light",
         color: "#FEFEFE",
+        marginBottom: "5%",
+    },
+    centeredView: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: 'rgba(0, 0, 0, 0.89)',
+    },
+    modalView: {
+        margin: 20,
+        backgroundColor: "#086972",
+        borderRadius: 20,
+        padding: "5%",
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        width: "86%",
+    },
+    modalText: {
+        fontFamily: 'sans-serif-light',
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#FFF',
+        textAlign: 'center',
+        marginBottom: "5%",
+    },
+    textStyle: {
+        fontFamily: 'sans-serif-light',
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#FFF',
+        textAlign: 'center',
+    },
+    modalButton: {
+        backgroundColor: 'rgba(0, 160, 0, 1)',
+        borderRadius: 10,
+        padding: "3%",
+        marginTop: "4%",
+        alignItems: 'center',
+        width: "100%",
+    },
+    backModal: {
+        marginTop: "4%",
+        alignItems: 'center',
+    },
+    modalInput: {
+        width: "100%",
+        backgroundColor: "#FFF",
+        borderRadius: 5,
+        padding: "3%",
         marginBottom: "5%",
     },
 })

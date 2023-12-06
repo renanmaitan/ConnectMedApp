@@ -105,9 +105,9 @@ const styles = StyleSheet.create({
     },
     cardContent: {
         fontFamily: 'sans-serif-light',
-        fontSize: 20,
+        fontSize: 16,
         fontWeight: 'bold',
-        marginBottom: "5%",
+        marginVertical: "1%",
     },
 });
 

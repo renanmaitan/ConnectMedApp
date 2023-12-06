@@ -43,6 +43,8 @@ export default function Login({ navigation }) {
                             minute: appointment.time.split(":")[1],
                             docId: appointment.id,
                             address: user.address ? user.address : "Consulta Online",
+                            phone: user.phone,
+                            birthDate: user.birthDate,
                             id: null,
                         });
                     }
@@ -84,6 +86,8 @@ export default function Login({ navigation }) {
                     docId: appointment.id,
                     id: null,
                     address: user.address ? user.address : "Consulta Online",
+                    phone: user.phone,
+                    birthDate: user.birthDate,
                 });
             }
             const [newData, newData2] = disjoinData(appointments);

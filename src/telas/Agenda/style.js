@@ -61,6 +61,7 @@ export default styles = StyleSheet.create({
         borderRadius: 10,
         alignItems: 'center',
         justifyContent: 'center',
+        padding: '5%',
     },
     centeredView: {
         flex: 1,

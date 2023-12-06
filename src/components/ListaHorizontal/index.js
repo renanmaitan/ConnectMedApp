@@ -5,6 +5,16 @@ import styles from "./style";
 const { width } = Dimensions.get("window");
 
 const ListaHorizontal = ({ data, type }) => {
+
+    function calcularIdade(dataNascimento) {
+        const parts = dataNascimento.split("/");
+        const dataNascObject = new Date(parts[2], parts[1] - 1, parts[0]);
+        const dataAtual = new Date();
+        const diff = dataAtual - dataNascObject;
+        const idade = Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25));
+        return idade;
+      }
+
     return (
         <FlatList
             data={data}
@@ -23,7 +33,8 @@ const ListaHorizontal = ({ data, type }) => {
                             <Text style={styles.cardTitle}>{item.hour}:{item.minute}</Text>
                         </View>
                         <View style={styles.cardBody}>
-                            <Text style={styles.cardContent}>{item.name}{'\n'}{item.specialty}</Text>
+                            <Text style={styles.cardContent}>{item.name}{'\n'}{item.specialty? item.specialty: calcularIdade(item.birthDate)+ " anos"}</Text>
+                            <Text style={styles.cardContent}>{item.phone}</Text>
                             <Text style={styles.cardContentUnderline}>{item.address}</Text>
                         </View>
                     </View>

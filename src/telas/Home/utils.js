@@ -84,7 +84,7 @@ export async function getUser(uid) {
             const user = doc.data();
             return { ...user, id: doc.id };
         }
-        return null;
+        throw new Error("Usuário não encontrado");
     } catch (error) {
         console.error("Erro ao buscar usuário:", error);
         throw error;
