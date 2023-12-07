@@ -335,7 +335,6 @@ export default function App(routes) {
                             })
                         }}
                         value={doctorForm.workDays}
-                        keyboardType="numeric"
                     />
                 </View>
                 {/* mostrar os dias até então selecionados (Segunda, Quarta e Quinta*/}
