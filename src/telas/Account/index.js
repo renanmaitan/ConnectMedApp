@@ -322,7 +322,6 @@ export default function Account({ navigation }) {
                     style={styles.scrollview}
                 >
                     <FontAwesome5 name="user-circle" color="#B1B1B1" size={100} style={{ marginBottom: "5%", marginTop: "5%" }} />
-                    <Text style={styles.title}>Alterar Dados</Text>
                     {list.map((item) => {
                         return (
                             <TouchableOpacity
